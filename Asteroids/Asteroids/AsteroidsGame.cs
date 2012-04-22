@@ -16,7 +16,7 @@ namespace Asteroids
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class AsteroidsGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
@@ -37,7 +37,7 @@ namespace Asteroids
         const int NUM_PLANETS = 3;
         const int NUM_STARS = 2;
 
-        public Game1()
+        public AsteroidsGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

@@ -157,9 +157,7 @@ namespace Asteroids
                 stars[i].Draw(camera);
             }
 
-            spriteDrawer.Begin();
-            spriteDrawer.DrawSprite(camera, Vector3.Zero, spriteTexture, 10.0f, Color.White);
-            spriteDrawer.End();
+            spriteDrawer.DrawSprite(camera, Vector3.Zero, spriteTexture, 0.1f, Color.White);
 
             base.Draw(gameTime);
         }

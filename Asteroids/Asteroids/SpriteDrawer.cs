@@ -9,11 +9,15 @@ namespace Asteroids
         private GraphicsDevice device;
         private SpriteBatch batch;
         private bool drawingInProgress = false;
+        private BasicEffect effect;
 
         public SpriteDrawer(GraphicsDevice device)
         {
             this.device = device;
-            this.batch = new SpriteBatch(device);
+            
+            batch = new SpriteBatch(device);
+            effect = new BasicEffect(device);
+            effect.TextureEnabled = true;
         }
 
         public void Dispose()
@@ -29,18 +33,13 @@ namespace Asteroids
 
         public void DrawSprite(ICamera camera, Vector3 position, Texture2D texture, float size, Color color)
         {
-            if (!drawingInProgress)
-                BeginWithoutSettingFlag();
+            effect.World = Matrix.CreateTranslation(position) * Matrix.CreateScale(size);
+            effect.View = camera.ViewMatrix;
+            effect.Projection = camera.ProjectionMatrix;
 
-            var worldMatrix = size != 1.0f ? Matrix.CreateScale(size) : Matrix.Identity;
-
-            var projection = device.Viewport.Project(position, camera.ProjectionMatrix, camera.ViewMatrix, worldMatrix);
-            var position2d = new Vector2(projection.X, projection.Y);
-
-            batch.Draw(texture, position2d, color);
-
-            if (!drawingInProgress)
-                EndWithoutResettingFlag();
+            batch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.LinearWrap, DepthStencilState.Default, RasterizerState.CullNone, effect);
+            batch.Draw(texture, Vector2.Zero, color);
+            batch.End();
         }
 
         public void End()
@@ -51,7 +50,7 @@ namespace Asteroids
 
         private void BeginWithoutSettingFlag()
         {
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, effect);
         }
 
         private void EndWithoutResettingFlag()

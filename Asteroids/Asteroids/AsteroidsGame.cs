@@ -30,7 +30,7 @@ namespace Asteroids
         Sphere[] planets = new Sphere[NUM_PLANETS];
         Sphere[] stars = new Sphere[NUM_STARS];
 
-        CoordCross cCross;
+        CoordCross coordCross;
         BasicEffect basicEffect;
 
         const int NUM_PLANETS = 3;
@@ -66,7 +66,7 @@ namespace Asteroids
             device.SamplerStates[0] = samplerState;
 
             basicEffect = new BasicEffect(device);
-            cCross = new CoordCross(device);
+            coordCross = new CoordCross(device);
 
             ship = new Spaceship(Content);
             camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
@@ -145,7 +145,7 @@ namespace Asteroids
 
             ship.Draw(camera);
 
-            cCross.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
+            coordCross.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
 
             for (int i = 0; i < NUM_PLANETS; ++i)
             {

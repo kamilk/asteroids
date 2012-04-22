@@ -130,7 +130,7 @@ namespace Asteroids
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.EnableDefaultLighting();
+                    effect.LightingEnabled = false;
 
                     effect.View = camera.ViewMatrix;
                     effect.Projection = camera.ProjectionMatrix;

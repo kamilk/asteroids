@@ -25,13 +25,13 @@ namespace Asteroids
         Model skyboxModel;
         Matrix[] skyboxTransforms;
 
-        ICamera fpsCam;
+        ICamera camera;
 
         Spaceship ship;
         Sphere[] planets = new Sphere[NUM_PLANETS];
         Sphere[] stars = new Sphere[NUM_STARS];
 
-        CoordCross cCross;
+        CoordCross coordCross;
         BasicEffect basicEffect;
 
         const int NUM_PLANETS = 3;
@@ -67,10 +67,10 @@ namespace Asteroids
             device.SamplerStates[0] = samplerState;
 
             basicEffect = new BasicEffect(device);
-            cCross = new CoordCross(device);
+            coordCross = new CoordCross(device);
 
             ship = new Spaceship(Content);
-            fpsCam = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
+            camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
 
             skyboxModel = Content.Load<Model>("skybox");
             skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
@@ -114,7 +114,7 @@ namespace Asteroids
                 return;
             }
 
-            fpsCam.Update(Mouse.GetState(), keyboardState, gamePadState);
+            camera.Update(Mouse.GetState(), keyboardState, gamePadState);
 
             base.Update(gameTime);
         }
@@ -132,26 +132,26 @@ namespace Asteroids
                 {
                     effect.EnableDefaultLighting();
 
-                    effect.View = fpsCam.ViewMatrix;
-                    effect.Projection = fpsCam.ProjectionMatrix;
+                    effect.View = camera.ViewMatrix;
+                    effect.Projection = camera.ProjectionMatrix;
                     effect.World = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(ship.SpacecraftPosition); ;
                 }
                 mesh.Draw();
             }
             device.DepthStencilState = DepthStencilState.Default;
 
-            ship.Draw(fpsCam);
+            ship.Draw(camera);
 
-            cCross.Draw(fpsCam.ViewMatrix, fpsCam.ProjectionMatrix);
+            coordCross.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
 
             for (int i = 0; i < NUM_PLANETS; ++i)
             {
-                planets[i].Draw(fpsCam);
+                planets[i].Draw(camera);
             }
 
             for (int i = 0; i < NUM_STARS; ++i)
             {
-                stars[i].Draw(fpsCam);
+                stars[i].Draw(camera);
             }
 
             base.Draw(gameTime);

@@ -9,8 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-
-
 namespace Asteroids
 {
     /// <summary>
@@ -20,12 +18,13 @@ namespace Asteroids
     {
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
-        SpriteBatch spriteBatch;
+        SpriteDrawer spriteDrawer;
+        Texture2D spriteTexture;
 
         Model skyboxModel;
         Matrix[] skyboxTransforms;
 
-        ICamera fpsCam;
+        ICamera camera;
 
         Spaceship ship;
         Sphere[] planets = new Sphere[NUM_PLANETS];
@@ -70,13 +69,12 @@ namespace Asteroids
             cCross = new CoordCross(device);
 
             ship = new Spaceship(Content);
-            fpsCam = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
+            camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
 
             skyboxModel = Content.Load<Model>("skybox");
             skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
 
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             planets[0] = new Sphere(Content);
             planets[1] = new Sphere(Content);
@@ -91,6 +89,9 @@ namespace Asteroids
 
             stars[0].SpherePosition = new Vector3(0, 0, 0);
             stars[1].SpherePosition = new Vector3(40, 20, -20);
+
+            spriteDrawer = new SpriteDrawer(device);
+            spriteTexture = Content.Load<Texture2D>("sprite");
         }
 
         /// <summary>
@@ -100,6 +101,8 @@ namespace Asteroids
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            spriteDrawer.Dispose();
+            spriteDrawer = null;
         }
 
         protected override void Update(GameTime gameTime)
@@ -114,7 +117,7 @@ namespace Asteroids
                 return;
             }
 
-            fpsCam.Update(Mouse.GetState(), keyboardState, gamePadState);
+            camera.Update(Mouse.GetState(), keyboardState, gamePadState);
 
             base.Update(gameTime);
         }
@@ -132,27 +135,31 @@ namespace Asteroids
                 {
                     effect.EnableDefaultLighting();
 
-                    effect.View = fpsCam.ViewMatrix;
-                    effect.Projection = fpsCam.ProjectionMatrix;
+                    effect.View = camera.ViewMatrix;
+                    effect.Projection = camera.ProjectionMatrix;
                     effect.World = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(ship.SpacecraftPosition); ;
                 }
                 mesh.Draw();
             }
             device.DepthStencilState = DepthStencilState.Default;
 
-            ship.Draw(fpsCam);
+            ship.Draw(camera);
 
-            cCross.Draw(fpsCam.ViewMatrix, fpsCam.ProjectionMatrix);
+            cCross.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
 
             for (int i = 0; i < NUM_PLANETS; ++i)
             {
-                planets[i].Draw(fpsCam);
+                planets[i].Draw(camera);
             }
 
             for (int i = 0; i < NUM_STARS; ++i)
             {
-                stars[i].Draw(fpsCam);
+                stars[i].Draw(camera);
             }
+
+            spriteDrawer.Begin();
+            spriteDrawer.DrawSprite(camera, Vector3.Zero, spriteTexture, 10.0f, Color.White);
+            spriteDrawer.End();
 
             base.Draw(gameTime);
         }

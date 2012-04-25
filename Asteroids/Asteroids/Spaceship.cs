@@ -11,8 +11,21 @@ namespace Asteroids
     public class Spaceship
     {
         Model model;
+
+        public Model Model
+        {
+            get { return model; }
+            set { model = value; }
+        }
         Matrix[] transforms;
         Quaternion spacecraftRotation;
+        Matrix worldMatrix;
+
+        public Matrix WorldMatrix
+        {
+            get { return worldMatrix; }
+            set { worldMatrix = value; }
+        }
 
         public Quaternion SpacecraftRotation
         {
@@ -29,8 +42,7 @@ namespace Asteroids
 
         public Spaceship(ContentManager content)
         {
-            model = content.Load<Model>("ship");
-            transforms = new Matrix[model.Bones.Count];
+            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "ship", content);
             spacecraftPosition = new Vector3(-1, 1, 10);
             spacecraftRotation = Quaternion.Identity;
         }
@@ -38,7 +50,7 @@ namespace Asteroids
         public void Draw(ICamera fpsCam)
         {
             model.CopyAbsoluteBoneTransformsTo(transforms);
-            Matrix worldMatrix = Matrix.CreateScale(1.0f / 5000.0f) * Matrix.CreateFromQuaternion(spacecraftRotation) * Matrix.CreateTranslation(spacecraftPosition);
+            worldMatrix = Matrix.CreateScale(1.0f / 5000.0f) * Matrix.CreateFromQuaternion(spacecraftRotation) * Matrix.CreateTranslation(spacecraftPosition);
 
             foreach (ModelMesh mesh in model.Meshes)
             {

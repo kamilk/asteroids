@@ -68,7 +68,7 @@ namespace Asteroids
             leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
             updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
 
-            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), leftrightRotation);
+            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), leftrightRotation);
             ship.SpacecraftRotation = ship.SpacecraftRotation * additionalRotation;
 
             AddToSpacecraftPosition(new Vector3(0, 0, speed));

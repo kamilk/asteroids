@@ -116,6 +116,7 @@
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpaceshipCamera.cs" />
     <Compile Include="Sphere.cs" />
+    <Compile Include="XNAUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

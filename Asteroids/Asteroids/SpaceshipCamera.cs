@@ -63,7 +63,17 @@ namespace Asteroids
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
                 leftrightRotation = 0.05f;
             if (keyboardState.IsKeyDown(Keys.RightShift) || keyboardState.IsKeyDown(Keys.LeftShift))
-                speed = -1;
+            {
+                ship.Velocity = (ship.Velocity >= 5) ? 5 : ship.Velocity +0.1f;
+            }
+            else if (keyboardState.IsKeyDown(Keys.Z))
+            {
+                ship.Velocity = (ship.Velocity <= 0.1) ? 0 : ship.Velocity - 0.1f;
+            }
+            else
+            {
+                ship.Velocity = (ship.Velocity <= 0.3) ? 0.2f : ship.Velocity - 0.02f;
+            }
 
             leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
             updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
@@ -71,7 +81,7 @@ namespace Asteroids
             Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), leftrightRotation);
             ship.SpacecraftRotation = ship.SpacecraftRotation * additionalRotation;
 
-            AddToSpacecraftPosition(new Vector3(0, 0, speed));
+            AddToSpacecraftPosition(new Vector3(0, 0, -ship.Velocity));
         }
 
         private void AddToSpacecraftPosition(Vector3 vectorToAdd)

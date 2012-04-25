@@ -25,6 +25,7 @@ namespace Asteroids
         Model skyboxModel;
         Matrix[] skyboxTransforms;
 
+
         ICamera camera;
 
         Spaceship ship;

@@ -21,6 +21,15 @@ namespace Asteroids
         Quaternion spacecraftRotation;
         Matrix worldMatrix;
 
+        float velocity;
+
+        public float Velocity
+        {
+            get { return velocity; }
+            set { velocity = value; }
+        }
+
+
         public Matrix WorldMatrix
         {
             get { return worldMatrix; }
@@ -45,6 +54,7 @@ namespace Asteroids
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "ship", content);
             spacecraftPosition = new Vector3(-1, 1, 10);
             spacecraftRotation = Quaternion.Identity;
+            velocity = 0;
         }
 
         public void Draw(ICamera fpsCam)

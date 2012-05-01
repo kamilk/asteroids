@@ -22,7 +22,8 @@ namespace Asteroids
         MouseState originalMouseState;
 
 
-        public SpaceshipCamera(Viewport viewPort, Spaceship ship) : this(viewPort, ship, new Vector3(0, 1, 15), 0, 0)
+        public SpaceshipCamera(Viewport viewPort, Spaceship ship)
+            : this(viewPort, ship, new Vector3(0, 1, 15), 0, 0)
         {
             //calls the constructor below with default startingPos and rotation values
         }
@@ -41,7 +42,7 @@ namespace Asteroids
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(viewAngle, viewPort.AspectRatio, nearPlane, farPlane);
 
 
-            Mouse.SetPosition(viewPort.Width/2, viewPort.Height/2);
+            Mouse.SetPosition(viewPort.Width / 2, viewPort.Height / 2);
             originalMouseState = Mouse.GetState();
         }
 
@@ -81,14 +82,15 @@ namespace Asteroids
         public Vector3 Position
         {
             get { return cameraPosition; }
-            set { 
+            set
+            {
                 cameraPosition = value;
                 Update();
             }
         }
         public Vector3 TargetPosition
         {
-            get 
+            get
             {
                 Matrix cameraRotation = Matrix.CreateRotationX(updownRot) * Matrix.CreateRotationY(leftrightRot);
                 Vector3 cameraOriginalTarget = new Vector3(0, 0, -1);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
@@ -19,7 +14,8 @@ namespace Asteroids
         }
         Vector3 Position
         {
-            get; set; 
+            get;
+            set;
         }
         void Update();
     }

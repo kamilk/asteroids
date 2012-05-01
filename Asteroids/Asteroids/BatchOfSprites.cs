@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
@@ -46,6 +45,7 @@ namespace Asteroids
                 throw new Exception("The batch of sprites cannot contain more sprites.");
 
             AddSpriteAtIndex(index, sprite);
+            sprite.PropertyChanged += new PropertyChangedEventHandler(onSpriteChanged);
             isVertexBufferUpToDate = false;
 
             spriteIndices.Add(sprite, index);
@@ -57,6 +57,7 @@ namespace Asteroids
             {
                 int index = spriteIndices[sprite];
                 spriteIndices.Remove(sprite);
+                sprite.PropertyChanged -= onSpriteChanged;
 
                 //if we're removing the first or the last sprite in the vertex buffer, 
                 //we may simply do it by moving pointers. If we're removing a sprite from
@@ -128,6 +129,18 @@ namespace Asteroids
         private int GetTriangleCount()
         {
             return 2 * (firstFreeSprite - firstActiveSprite);
+        }
+
+        private void onSpriteChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var sprite = sender as Sprite;
+            if (sprite == null)
+                return;
+            int index;
+            if (!spriteIndices.TryGetValue(sprite, out index))
+                return;
+            AddSpriteAtIndex(index, sprite);
+            isVertexBufferUpToDate = false;
         }
     }
 }

@@ -38,6 +38,9 @@ namespace Asteroids
         const int NUM_STARS = 2;
         private BatchOfSprites batchOfSprites;
 
+        private Sprite sprite1;
+        private Sprite sprite2;
+
         public AsteroidsGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -95,8 +98,8 @@ namespace Asteroids
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteTexture = Content.Load<Texture2D>("sprite");
             batchOfSprites = new BatchOfSprites(device);
-            Sprite sprite1 = new Sprite(Vector3.Zero, 1.0f);
-            Sprite sprite2 = new Sprite(new Vector3(3.0f, 5.0f, 1.0f), 2.0f, Color.Blue, 0.5f);
+            sprite1 = new Sprite(Vector3.Zero, 1.0f);
+            sprite2 = new Sprite(new Vector3(3.0f, 4.0f, 1.0f), 2.0f, Color.Blue, 0.5f);
             Sprite sprite3 = new Sprite(new Vector3(-3.0f, 1.0f, 1.0f), 2.0f, Color.Green, -0.5f);
             batchOfSprites.AddSprite(sprite1);
             batchOfSprites.AddSprite(sprite2);
@@ -129,6 +132,10 @@ namespace Asteroids
 
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
+
+            Vector3 oldPosition = sprite2.Position;
+            float displacement = 3.0f * (float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
+            sprite2.Position = new Vector3(oldPosition.X + displacement, oldPosition.Y, oldPosition.Z);
 
             base.Update(gameTime);
         }

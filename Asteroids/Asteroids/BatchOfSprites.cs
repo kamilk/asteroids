@@ -9,34 +9,19 @@ namespace Asteroids
 {
     class BatchOfSprites
     {
-        private const int MaxSprites = 100;
+        public const int MaxSprites = 100;
 
         private GraphicsDevice device;
         private SpriteCornerVertex[] spriteVertices = new SpriteCornerVertex[MaxSprites * 6];
         private int firstActiveSprite;
         private int firstFreeSprite;
         private VertexBuffer vertexBuffer;
-        private IndexBuffer indexBuffer;
         private bool isVertexBufferUpToDate = false;
 
         public BatchOfSprites(GraphicsDevice device)
         {
             this.device = device;
             vertexBuffer = new VertexBuffer(device, SpriteCornerVertex.VertexDeclaration, MaxSprites * 4, BufferUsage.WriteOnly);
-            indexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, MaxSprites * 6, BufferUsage.WriteOnly);
-
-            var indices = new ushort[MaxSprites * 6];
-            for (int i = 0; i < MaxSprites; i++)
-            {
-                indices[i * 6 + 0] = (ushort)(i * 4 + 0);
-                indices[i * 6 + 1] = (ushort)(i * 4 + 1);
-                indices[i * 6 + 2] = (ushort)(i * 4 + 2);
-
-                indices[i * 6 + 3] = (ushort)(i * 4 + 0);
-                indices[i * 6 + 4] = (ushort)(i * 4 + 2);
-                indices[i * 6 + 5] = (ushort)(i * 4 + 3);
-            }
-            indexBuffer.SetData<ushort>(indices);
 
             firstActiveSprite = -1;
             firstFreeSprite = 0;
@@ -63,11 +48,6 @@ namespace Asteroids
             if (!isVertexBufferUpToDate)
                 LoadIntoVertexBuffer(vertexBuffer);
             return vertexBuffer;
-        }
-
-        public IndexBuffer GetIndexBuffer()
-        {
-            return indexBuffer;
         }
 
         public void DrawAll()

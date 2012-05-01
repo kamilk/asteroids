@@ -8,7 +8,7 @@ namespace Asteroids
     class SpriteDrawer : IDisposable
     {
         private GraphicsDevice device;
-        private VertexBuffer vertexBuffer;
+        private IndexBuffer indexBuffer;
         private Effect effect;
         private RasterizerState rasterizerState;
         private RasterizerState oldRasterizerState;
@@ -18,7 +18,22 @@ namespace Asteroids
         {
             this.device = device;
 
-            vertexBuffer = new VertexBuffer(device, VertexPositionColorTexture.VertexDeclaration, 6, BufferUsage.WriteOnly);
+            int spritesInBatch = BatchOfSprites.MaxSprites;
+            int verticesInBatch = spritesInBatch * 6;
+            indexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, verticesInBatch, BufferUsage.WriteOnly);
+
+            var indices = new ushort[verticesInBatch];
+            for (int i = 0; i < spritesInBatch; i++)
+            {
+                indices[i * 6 + 0] = (ushort)(i * 4 + 0);
+                indices[i * 6 + 1] = (ushort)(i * 4 + 1);
+                indices[i * 6 + 2] = (ushort)(i * 4 + 2);
+
+                indices[i * 6 + 3] = (ushort)(i * 4 + 0);
+                indices[i * 6 + 4] = (ushort)(i * 4 + 2);
+                indices[i * 6 + 5] = (ushort)(i * 4 + 3);
+            }
+            indexBuffer.SetData<ushort>(indices);
 
             effect = content.Load<Effect>("SpriteEffect");
 
@@ -28,7 +43,7 @@ namespace Asteroids
 
         public void Dispose()
         {
-            vertexBuffer.Dispose();
+            indexBuffer.Dispose();
         }
 
         public void Begin(ICamera camera)
@@ -45,6 +60,8 @@ namespace Asteroids
 
             oldRasterizerState = device.RasterizerState;
             device.RasterizerState = rasterizerState;
+
+            device.Indices = indexBuffer;
         }
 
         public void SetTexture(Texture2D texture)
@@ -80,7 +97,6 @@ namespace Asteroids
         public void DrawBatchOfSprites(BatchOfSprites batch)
         {
             device.SetVertexBuffer(batch.GetVertexBuffer());
-            device.Indices = batch.GetIndexBuffer();
 
             effect.Parameters["World"].SetValue(Matrix.Identity);
 

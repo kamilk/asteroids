@@ -27,13 +27,13 @@ namespace Asteroids
             firstFreeSprite = 0;
         }
 
-        public void AddSprite(Vector3 position)
+        public void AddSprite(SpriteData spriteData)
         {
             if (firstActiveSprite > 0)
-                AddSpriteAtIndex(--firstActiveSprite, position);
+                AddSpriteAtIndex(--firstActiveSprite, spriteData);
             else if (firstFreeSprite < MaxSprites - 1)
             {
-                AddSpriteAtIndex(firstFreeSprite++, position);
+                AddSpriteAtIndex(firstFreeSprite++, spriteData);
                 if (firstActiveSprite < 0)
                     firstActiveSprite = 0;
             }
@@ -55,13 +55,17 @@ namespace Asteroids
             device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, GetVertexCount(), 0, GetTriangleCount());
         }
 
-        private void AddSpriteAtIndex(int idx, Vector3 position)
+        private void AddSpriteAtIndex(int idx, SpriteData spriteData)
         {
             int baseIdx = idx * 4;
-            spriteVertices[baseIdx + 0] = new SpriteCornerVertex(new Vector2(-0.5f, -0.5f), position, Color.White, 1.0f, 0.0f);
-            spriteVertices[baseIdx + 1] = new SpriteCornerVertex(new Vector2(-0.5f, 0.5f), position, Color.White, 1.0f, 0.0f);
-            spriteVertices[baseIdx + 2] = new SpriteCornerVertex(new Vector2(0.5f, 0.5f), position, Color.White, 1.0f, 0.0f);
-            spriteVertices[baseIdx + 3] = new SpriteCornerVertex(new Vector2(0.5f, -0.5f), position, Color.White, 1.0f, 0.0f);
+            Vector3 position = spriteData.Position;
+            Color color = spriteData.Color;
+            float size = spriteData.Size;
+            float rotation = spriteData.Rotation;
+            spriteVertices[baseIdx + 0] = new SpriteCornerVertex(new Vector2(-0.5f, -0.5f), position, color, size, rotation);
+            spriteVertices[baseIdx + 1] = new SpriteCornerVertex(new Vector2(-0.5f, 0.5f), position, color, size, rotation);
+            spriteVertices[baseIdx + 2] = new SpriteCornerVertex(new Vector2(0.5f, 0.5f), position, color, size, rotation);
+            spriteVertices[baseIdx + 3] = new SpriteCornerVertex(new Vector2(0.5f, -0.5f), position, color, size, rotation);
         }
 
         private void LoadIntoVertexBuffer(VertexBuffer vertexBuffer)

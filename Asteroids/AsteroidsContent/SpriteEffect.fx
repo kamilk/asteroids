@@ -22,8 +22,8 @@ struct VertexShaderInput
 	float2 Corner : POSITION0;
 	float4 SpriteCenter : POSITION1;
 	float4 Color : COLOR;
-	float Size : POINTSIZE0;
-	float Rotation : POINTSIZE1;
+	float Size : TEXCOORD0;
+	float Rotation : TEXCOORD1;
 };
 
 struct VertexShaderOutput
@@ -37,8 +37,14 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
     VertexShaderOutput output;
 
+	// Compute a 2x2 rotation matrix.
+    float c = cos(input.Rotation);
+    float s = sin(input.Rotation);
+    
+    float2x2 rotationMatrix = float2x2(c, -s, s, c);
+
     output.Position = mul(mul(input.SpriteCenter, View), Projection);
-	output.Position.xy +=  input.Corner * ViewportScale * Projection._m11;
+	output.Position.xy +=  mul(rotationMatrix, input.Corner) * ViewportScale * input.Size * Projection._m11;
 
 	output.TexCoord = input.Corner + 0.5;
 	output.Color = input.Color;

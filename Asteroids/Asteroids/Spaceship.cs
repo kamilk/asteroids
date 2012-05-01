@@ -12,8 +12,30 @@ namespace Asteroids
     public class Spaceship
     {
         Model model;
+
+        public Model Model
+        {
+            get { return model; }
+            set { model = value; }
+        }
         Matrix[] transforms;
         Quaternion spacecraftRotation;
+        Matrix worldMatrix;
+
+        float velocity;
+
+        public float Velocity
+        {
+            get { return velocity; }
+            set { velocity = value; }
+        }
+
+
+        public Matrix WorldMatrix
+        {
+            get { return worldMatrix; }
+            set { worldMatrix = value; }
+        }
 
         public Quaternion SpacecraftRotation
         {
@@ -30,16 +52,16 @@ namespace Asteroids
 
         public Spaceship(ContentManager content)
         {
-            model = content.Load<Model>("ship");
-            transforms = new Matrix[model.Bones.Count];
+            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "ship", content);
             spacecraftPosition = new Vector3(-1, 1, 10);
             spacecraftRotation = Quaternion.Identity;
+            velocity = 0;
         }
 
         public void Draw(ICamera fpsCam)
         {
             model.CopyAbsoluteBoneTransformsTo(transforms);
-            Matrix worldMatrix = Matrix.CreateScale(1.0f / 5000.0f) * Matrix.CreateFromQuaternion(spacecraftRotation) * Matrix.CreateTranslation(spacecraftPosition);
+            worldMatrix = Matrix.CreateScale(1.0f / 5000.0f) * Matrix.CreateFromQuaternion(spacecraftRotation) * Matrix.CreateTranslation(spacecraftPosition);
 
             foreach (ModelMesh mesh in model.Meshes)
             {
@@ -78,15 +100,26 @@ namespace Asteroids
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
                 leftrightRotation = 0.05f;
             if (keyboardState.IsKeyDown(Keys.RightShift) || keyboardState.IsKeyDown(Keys.LeftShift))
-                speed = -1;
+            {
+                Velocity = (Velocity >= 5) ? 5 : Velocity + 0.1f;
+            }
+            else if (keyboardState.IsKeyDown(Keys.Z))
+            {
+                Velocity = (Velocity <= 0.1) ? 0 : Velocity - 0.1f;
+            }
+            else
+            {
+                Velocity = (Velocity <= 0.3) ? 0.2f : Velocity - 0.02f;
+            }
+
 
             leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
             updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
 
-            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), leftrightRotation);
+            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), leftrightRotation);
             SpacecraftRotation = SpacecraftRotation * additionalRotation;
 
-            AddToSpacecraftPosition(new Vector3(0, 0, speed));
+            AddToSpacecraftPosition(new Vector3(0, 0, -Velocity));
         }
 
         private void AddToSpacecraftPosition(Vector3 vectorToAdd)

@@ -117,7 +117,8 @@ namespace Asteroids
                 return;
             }
 
-            camera.Update(Mouse.GetState(), keyboardState, gamePadState);
+            ship.Update(Mouse.GetState(), keyboardState, gamePadState);
+            camera.Update();
 
             base.Update(gameTime);
         }

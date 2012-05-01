@@ -22,7 +22,8 @@ namespace Asteroids
         MouseState originalMouseState;
 
 
-        public SpaceshipCamera(Viewport viewPort, Spaceship ship) : this(viewPort, ship, new Vector3(0, 1, 15), 0, 0)
+        public SpaceshipCamera(Viewport viewPort, Spaceship ship)
+            : this(viewPort, ship, new Vector3(0, 1, 15), 0, 0)
         {
             //calls the constructor below with default startingPos and rotation values
         }
@@ -41,48 +42,11 @@ namespace Asteroids
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(viewAngle, viewPort.AspectRatio, nearPlane, farPlane);
 
 
-            Mouse.SetPosition(viewPort.Width/2, viewPort.Height/2);
+            Mouse.SetPosition(viewPort.Width / 2, viewPort.Height / 2);
             originalMouseState = Mouse.GetState();
-        }        
-
-        public void Update(MouseState currentMouseState, KeyboardState keyboardState, GamePadState gamePadState)
-        {
-            float updownRotation = 0.0f;
-            float leftrightRotation = 0.0f;
-            float speed = 0.0f;
-
-            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
-            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
-
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
-                updownRotation = -0.05f;
-            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
-                updownRotation = 0.05f;
-            if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
-                leftrightRotation = -0.05f;
-            if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
-                leftrightRotation = 0.05f;
-            if (keyboardState.IsKeyDown(Keys.RightShift) || keyboardState.IsKeyDown(Keys.LeftShift))
-                speed = -1;
-
-            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
-            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
-
-            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), leftrightRotation);
-            ship.SpacecraftRotation = ship.SpacecraftRotation * additionalRotation;
-
-            AddToSpacecraftPosition(new Vector3(0, 0, speed));
         }
 
-        private void AddToSpacecraftPosition(Vector3 vectorToAdd)
-        {
-            float moveSpeed = 0.05f;
-            Vector3 rotatedVector = Vector3.Transform(vectorToAdd, ship.SpacecraftRotation);
-            ship.SpacecraftPosition += moveSpeed * rotatedVector;
-            UpdateViewMatrix();
-        }
-
-        private void UpdateViewMatrix()
+        public void Update()
         {
             Vector3 cameraOriginalPosition = new Vector3(0, 0, 1);
             Vector3 cameraRotatedPosition = Vector3.Transform(cameraOriginalPosition, ship.SpacecraftRotation);
@@ -118,14 +82,15 @@ namespace Asteroids
         public Vector3 Position
         {
             get { return cameraPosition; }
-            set { 
+            set
+            {
                 cameraPosition = value;
-                UpdateViewMatrix();
+                Update();
             }
         }
         public Vector3 TargetPosition
         {
-            get 
+            get
             {
                 Matrix cameraRotation = Matrix.CreateRotationX(updownRot) * Matrix.CreateRotationY(leftrightRot);
                 Vector3 cameraOriginalTarget = new Vector3(0, 0, -1);

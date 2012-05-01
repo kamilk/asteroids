@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
 namespace Asteroids
 {
@@ -57,6 +58,42 @@ namespace Asteroids
         public void AddRotation(Quaternion additionalRotation)
         {
             spacecraftRotation = spacecraftRotation * additionalRotation;
+        }
+
+        public void Update(MouseState currentMouseState, KeyboardState keyboardState, GamePadState gamePadState)
+        {
+            float updownRotation = 0.0f;
+            float leftrightRotation = 0.0f;
+            float speed = 0.0f;
+
+            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
+            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
+
+            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
+                updownRotation = -0.05f;
+            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
+                updownRotation = 0.05f;
+            if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
+                leftrightRotation = -0.05f;
+            if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
+                leftrightRotation = 0.05f;
+            if (keyboardState.IsKeyDown(Keys.RightShift) || keyboardState.IsKeyDown(Keys.LeftShift))
+                speed = -1;
+
+            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
+            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
+
+            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), leftrightRotation);
+            SpacecraftRotation = SpacecraftRotation * additionalRotation;
+
+            AddToSpacecraftPosition(new Vector3(0, 0, speed));
+        }
+
+        private void AddToSpacecraftPosition(Vector3 vectorToAdd)
+        {
+            float moveSpeed = 0.05f;
+            Vector3 rotatedVector = Vector3.Transform(vectorToAdd, SpacecraftRotation);
+            SpacecraftPosition += moveSpeed * rotatedVector;
         }
     }
 }

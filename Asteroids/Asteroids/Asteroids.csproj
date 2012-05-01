@@ -116,6 +116,7 @@
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpaceshipCamera.cs" />
     <Compile Include="Sphere.cs" />
+    <Compile Include="Sprite.cs" />
     <Compile Include="SpriteCornerVertex.cs" />
     <Compile Include="SpriteData.cs" />
     <Compile Include="XNAUtils.cs" />

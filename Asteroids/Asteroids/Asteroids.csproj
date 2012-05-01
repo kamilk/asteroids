@@ -115,6 +115,7 @@
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpaceshipCamera.cs" />
     <Compile Include="Sphere.cs" />
+    <Compile Include="XNAUtils.cs" />
     <Compile Include="SpriteDrawer.cs">
       <SubType>Code</SubType>
     </Compile>

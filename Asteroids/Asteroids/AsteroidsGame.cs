@@ -24,6 +24,7 @@ namespace Asteroids
         Model skyboxModel;
         Matrix[] skyboxTransforms;
 
+
         ICamera camera;
 
         Spaceship ship;
@@ -148,16 +149,30 @@ namespace Asteroids
 
             coordCross.Draw(camera.ViewMatrix, camera.ProjectionMatrix);
 
+            Matrix world1 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(-10, 0, 0);
+            Matrix world2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(1000, 0, 0);
+
+            bool anyColision = false;
+
             for (int i = 0; i < NUM_PLANETS; ++i)
             {
                 planets[i].Draw(camera);
+                if (XNAUtils.ModelsCollide(planets[i].Model, planets[i].WorldMatrix, ship.Model, ship.WorldMatrix))
+                    anyColision = true;
             }
 
             for (int i = 0; i < NUM_STARS; ++i)
             {
                 stars[i].Draw(camera);
+                if (XNAUtils.ModelsCollide(stars[i].Model, stars[i].WorldMatrix, ship.Model, ship.WorldMatrix))
+                    anyColision = true;
             }
 
+            if (anyColision)
+                Window.Title = "Asteroids - Kolizja";
+            else
+                Window.Title = "Asteroids";
+                
             spriteDrawer.Begin(camera);
             spriteDrawer.SetTexture(spriteTexture);
             spriteDrawer.DrawSprite(camera, Vector3.Zero, 10.0f, Color.White);

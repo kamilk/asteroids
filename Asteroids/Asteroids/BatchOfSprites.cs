@@ -28,7 +28,7 @@ namespace Asteroids
             firstFreeSprite = 0;
         }
 
-        public Sprite AddSprite(SpriteData spriteData)
+        public void AddSprite(Sprite sprite)
         {
             int index;
             if (firstActiveSprite > 0)
@@ -38,19 +38,17 @@ namespace Asteroids
             else if (firstFreeSprite < MaxSprites - 1)
             {
                 index = firstFreeSprite++;
-                AddSpriteAtIndex(index, spriteData);
+                AddSpriteAtIndex(index, sprite);
                 if (firstActiveSprite < 0)
                     firstActiveSprite = 0;
             }
             else
                 throw new Exception("The batch of sprites cannot contain more sprites.");
 
-            AddSpriteAtIndex(index, spriteData);
+            AddSpriteAtIndex(index, sprite);
             isVertexBufferUpToDate = false;
 
-            var sprite = new Sprite(this, spriteData);
             spriteIndices.Add(sprite, index);
-            return sprite;
         }
 
         public void RemoveSprite(Sprite sprite)
@@ -59,7 +57,6 @@ namespace Asteroids
             {
                 int index = spriteIndices[sprite];
                 spriteIndices.Remove(sprite);
-                sprite.DetachFromParent();
 
                 //if we're removing the first or the last sprite in the vertex buffer, 
                 //we may simply do it by moving pointers. If we're removing a sprite from
@@ -81,7 +78,7 @@ namespace Asteroids
             var newSpriteIndices = new Dictionary<Sprite, int>();
             foreach (var sprite in spriteIndices.Keys)
             {
-                AddSpriteAtIndex(index, sprite.SpriteData);
+                AddSpriteAtIndex(index, sprite);
                 newSpriteIndices[sprite] = index;
                 index++;
             }
@@ -103,13 +100,13 @@ namespace Asteroids
             device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, GetVertexCount(), 0, GetTriangleCount());
         }
 
-        private void AddSpriteAtIndex(int idx, SpriteData spriteData)
+        private void AddSpriteAtIndex(int idx, Sprite sprite)
         {
             int baseIdx = idx * 4;
-            Vector3 position = spriteData.Position;
-            Color color = spriteData.Color;
-            float size = spriteData.Size;
-            float rotation = spriteData.Rotation;
+            Vector3 position = sprite.Position;
+            Color color = sprite.Color;
+            float size = sprite.Size;
+            float rotation = sprite.Rotation;
             spriteVertices[baseIdx + 0] = new SpriteCornerVertex(new Vector2(-0.5f, -0.5f), position, color, size, rotation);
             spriteVertices[baseIdx + 1] = new SpriteCornerVertex(new Vector2(-0.5f, 0.5f), position, color, size, rotation);
             spriteVertices[baseIdx + 2] = new SpriteCornerVertex(new Vector2(0.5f, 0.5f), position, color, size, rotation);

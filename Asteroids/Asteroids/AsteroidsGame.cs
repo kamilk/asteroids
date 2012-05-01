@@ -95,9 +95,12 @@ namespace Asteroids
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteTexture = Content.Load<Texture2D>("sprite");
             batchOfSprites = new BatchOfSprites(device);
-            var sprite1 = batchOfSprites.AddSprite(new SpriteData(Vector3.Zero, 1.0f));
-            var sprite2 = batchOfSprites.AddSprite(new SpriteData(new Vector3(3.0f, 5.0f, 1.0f), 2.0f, Color.Blue, 0.5f));
-            var sprite3 = batchOfSprites.AddSprite(new SpriteData(new Vector3(-3.0f, 1.0f, 1.0f), 2.0f, Color.Green, -0.5f));
+            Sprite sprite1 = new Sprite(Vector3.Zero, 1.0f);
+            Sprite sprite2 = new Sprite(new Vector3(3.0f, 5.0f, 1.0f), 2.0f, Color.Blue, 0.5f);
+            Sprite sprite3 = new Sprite(new Vector3(-3.0f, 1.0f, 1.0f), 2.0f, Color.Green, -0.5f);
+            batchOfSprites.AddSprite(sprite1);
+            batchOfSprites.AddSprite(sprite2);
+            batchOfSprites.AddSprite(sprite3);
             batchOfSprites.RemoveSprite(sprite3);
         }
 

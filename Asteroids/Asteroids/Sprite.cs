@@ -2,34 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
     class Sprite
     {
-        private BatchOfSprites parent;
+        public Vector3 Position { get; set; }
+        public Color Color { get; set; }
+        public float Size { get; set; }
+        public float Rotation { get; set; }
 
-        public SpriteData SpriteData
+        public Sprite(Vector3 position, float size, Color color, float rotation = 0.0f)
         {
-            get;
-            private set;
+            this.Position = position;
+            this.Color = color;
+            this.Size = size;
+            this.Rotation = rotation;
         }
 
-        public Sprite(BatchOfSprites batch, SpriteData data)
-        {
-            this.parent = batch;
-            this.SpriteData = data;
-        }
+        public Sprite(Vector3 position, float size)
+            : this(position, size, Color.White)
+        { }
 
         public override int GetHashCode()
         {
-            return SpriteData.Color.GetHashCode() + SpriteData.Position.GetHashCode()
-                + SpriteData.Rotation.GetHashCode() + SpriteData.Size.GetHashCode();
-        }
-
-        public void DetachFromParent()
-        {
-            parent = null;
+            return Color.GetHashCode() + Position.GetHashCode()
+                + Rotation.GetHashCode() + Size.GetHashCode();
         }
     }
 }

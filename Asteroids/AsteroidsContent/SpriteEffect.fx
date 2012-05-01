@@ -1,6 +1,7 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
+float2 ViewportScale;
 
 texture Texture;
 
@@ -19,7 +20,7 @@ sampler Sampler = sampler_state
 struct VertexShaderInput
 {
 	float2 Corner : POSITION0;
-	float4 ParticleCenter : POSITION1;
+	float4 SpriteCenter : POSITION1;
 	float4 Color : COLOR;
 	float Size : POINTSIZE0;
 	float Rotation : POINTSIZE1;
@@ -36,11 +37,9 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
     VertexShaderOutput output;
 
-	float4 position = input.ParticleCenter + float4(input.Corner, 0, 0);
+    output.Position = mul(mul(input.SpriteCenter, View), Projection);
+	output.Position.xy +=  input.Corner * ViewportScale * Projection._m11;
 
-    float4 worldPosition = mul(position, World);
-    float4 viewPosition = mul(worldPosition, View);
-    output.Position = mul(viewPosition, Projection);
 	output.TexCoord = input.Corner + 0.5;
 	output.Color = input.Color;
 

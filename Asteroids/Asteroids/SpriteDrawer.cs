@@ -41,6 +41,7 @@ namespace Asteroids
         {
             effect.Parameters["View"].SetValue(camera.ViewMatrix);
             effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            effect.Parameters["ViewportScale"].SetValue(new Vector2(0.5f / device.Viewport.AspectRatio, -0.5f));
 
             oldRasterizerState = device.RasterizerState;
             device.RasterizerState = rasterizerState;

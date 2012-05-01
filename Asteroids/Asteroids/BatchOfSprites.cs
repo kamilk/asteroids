@@ -104,7 +104,7 @@ namespace Asteroids
         private void AddSpriteAtIndex(int idx, Sprite sprite)
         {
             int baseIdx = idx * 4;
-            Vector3 position = sprite.Position;
+            Vector3 position = sprite.Position.GetVector3();
             Color color = sprite.Color;
             float size = sprite.Size;
             float rotation = sprite.Rotation;

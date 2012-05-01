@@ -11,17 +11,12 @@ namespace Asteroids
     {
         int hash;
 
-        private Vector3 _Position;
-        public Vector3 Position
+        private ObservableVector3 _Position;
+        public ObservableVector3 Position
         {
             get
             {
                 return _Position;
-            }
-            set
-            {
-                _Position = value;
-                NotifyPropertyChanged("Position");
             }
         }
 
@@ -69,12 +64,14 @@ namespace Asteroids
 
         public Sprite(Vector3 position, float size, Color color, float rotation = 0.0f)
         {
-            this.Position = position;
+            this._Position = new ObservableVector3(position);
             this.Color = color;
             this.Size = size;
             this.Rotation = rotation;
 
             hash = new Random().Next();
+
+            _Position.PropertyChanged += new PropertyChangedEventHandler(OnPositionChanged);
         }
 
         public Sprite(Vector3 position, float size)
@@ -84,6 +81,11 @@ namespace Asteroids
         public override int GetHashCode()
         {
             return hash;
+        }
+
+        private void OnPositionChanged(object sender, PropertyChangedEventArgs e)
+        {
+            NotifyPropertyChanged("Position");
         }
 
         private void NotifyPropertyChanged(string propertyName)

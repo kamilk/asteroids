@@ -133,9 +133,8 @@ namespace Asteroids
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
 
-            Vector3 oldPosition = sprite2.Position;
             float displacement = 3.0f * (float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
-            sprite2.Position = new Vector3(oldPosition.X + displacement, oldPosition.Y, oldPosition.Z);
+            sprite2.Position.X += displacement;
 
             base.Update(gameTime);
         }

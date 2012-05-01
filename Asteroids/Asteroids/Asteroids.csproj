@@ -110,6 +110,7 @@
     <Compile Include="BatchOfSprites.cs" />
     <Compile Include="ICamera.cs" />
     <Compile Include="CoordCross.cs" />
+    <Compile Include="ObservableVector3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="AsteroidsGame.cs" />

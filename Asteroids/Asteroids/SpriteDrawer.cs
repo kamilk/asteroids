@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
@@ -8,12 +9,12 @@ namespace Asteroids
     {
         private GraphicsDevice device;
         private VertexBuffer vertexBuffer;
-        private BasicEffect effect;
+        private Effect effect;
         private RasterizerState rasterizerState;
         private RasterizerState oldRasterizerState;
         private bool drawingInProgress;
         
-        public SpriteDrawer(GraphicsDevice device)
+        public SpriteDrawer(GraphicsDevice device, ContentManager content)
         {
             this.device = device;
 
@@ -29,8 +30,7 @@ namespace Asteroids
             vertexBuffer = new VertexBuffer(device, VertexPositionColorTexture.VertexDeclaration, 6, BufferUsage.WriteOnly);
             vertexBuffer.SetData<VertexPositionColorTexture>(vertices);
 
-            effect = new BasicEffect(device);
-            effect.TextureEnabled = true;
+            effect = content.Load<Effect>("SpriteEffect");
 
             rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
@@ -49,10 +49,8 @@ namespace Asteroids
 
         private void BeginWithoutSettingFlag(ICamera camera)
         {
-            effect.View = camera.ViewMatrix;
-            effect.Projection = camera.ProjectionMatrix;
-
-            effect.LightingEnabled = false;
+            effect.Parameters["View"].SetValue(camera.ViewMatrix);
+            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
 
             oldRasterizerState = device.RasterizerState;
             device.RasterizerState = rasterizerState;
@@ -62,7 +60,7 @@ namespace Asteroids
 
         public void SetTexture(Texture2D texture)
         {
-            effect.Texture = texture;
+            effect.Parameters["Texture"].SetValue(texture);
         }
 
         public void End()
@@ -81,7 +79,7 @@ namespace Asteroids
             if (!drawingInProgress)
                 throw new Exception("DrawSprite() was called before Begin()");
 
-            effect.World = Matrix.CreateTranslation(position) * Matrix.CreateScale(size);
+            effect.Parameters["World"].SetValue(Matrix.CreateTranslation(position) * Matrix.CreateScale(size));
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {

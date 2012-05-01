@@ -91,7 +91,7 @@ namespace Asteroids
             stars[0].SpherePosition = new Vector3(0, 0, 0);
             stars[1].SpherePosition = new Vector3(40, 20, -20);
 
-            spriteDrawer = new SpriteDrawer(device);
+            spriteDrawer = new SpriteDrawer(device, Content);
             spriteTexture = Content.Load<Texture2D>("sprite");
         }
 

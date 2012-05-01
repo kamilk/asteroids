@@ -36,6 +36,7 @@ namespace Asteroids
 
         const int NUM_PLANETS = 3;
         const int NUM_STARS = 2;
+        private BatchOfSprites batchOfSprites;
 
         public AsteroidsGame()
         {
@@ -93,6 +94,9 @@ namespace Asteroids
 
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteTexture = Content.Load<Texture2D>("sprite");
+            batchOfSprites = new BatchOfSprites(device);
+            batchOfSprites.AddSprite(Vector3.Zero);
+            batchOfSprites.AddSprite(new Vector3(3.0f, 5.0f, 1.0f));
         }
 
         /// <summary>
@@ -175,7 +179,7 @@ namespace Asteroids
                 
             spriteDrawer.Begin(camera);
             spriteDrawer.SetTexture(spriteTexture);
-            spriteDrawer.DrawSprite(camera, Vector3.Zero, 10.0f, Color.White);
+            spriteDrawer.DrawBatchOfSprites(batchOfSprites);
             spriteDrawer.End();
 
             base.Draw(gameTime);

@@ -13,22 +13,12 @@ namespace Asteroids
         private RasterizerState rasterizerState;
         private RasterizerState oldRasterizerState;
         private bool drawingInProgress;
-        
+
         public SpriteDrawer(GraphicsDevice device, ContentManager content)
         {
             this.device = device;
 
-            var vertices = new VertexPositionColorTexture[6];
-            vertices[0] = new VertexPositionColorTexture(new Vector3(-0.5f, -0.5f, 0.0f), Color.White, new Vector2(0.0f, 0.0f));
-            vertices[1] = new VertexPositionColorTexture(new Vector3(-0.5f, 0.5f, 0.0f), Color.White, new Vector2(0.0f, 1.0f));
-            vertices[2] = new VertexPositionColorTexture(new Vector3(0.5f, 0.5f, 0.0f), Color.White, new Vector2(1.0f, 1.0f));
-
-            vertices[3] = new VertexPositionColorTexture(new Vector3(-0.5f, -0.5f, 0.0f), Color.White, new Vector2(0.0f, 0.0f));
-            vertices[4] = new VertexPositionColorTexture(new Vector3(0.5f, 0.5f, 0.0f), Color.White, new Vector2(1.0f, 1.0f));
-            vertices[5] = new VertexPositionColorTexture(new Vector3(0.5f, -0.5f, 0.0f), Color.White, new Vector2(1.0f, 0.0f));
-
             vertexBuffer = new VertexBuffer(device, VertexPositionColorTexture.VertexDeclaration, 6, BufferUsage.WriteOnly);
-            vertexBuffer.SetData<VertexPositionColorTexture>(vertices);
 
             effect = content.Load<Effect>("SpriteEffect");
 
@@ -54,8 +44,6 @@ namespace Asteroids
 
             oldRasterizerState = device.RasterizerState;
             device.RasterizerState = rasterizerState;
-
-            device.SetVertexBuffer(vertexBuffer);
         }
 
         public void SetTexture(Texture2D texture)
@@ -85,6 +73,19 @@ namespace Asteroids
             {
                 pass.Apply();
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
+            }
+        }
+
+        public void DrawBatchOfSprites(BatchOfSprites batch)
+        {
+            device.SetVertexBuffer(batch.GetVertexBuffer());
+
+            effect.Parameters["World"].SetValue(Matrix.Identity);
+
+            foreach (var pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                batch.DrawAll();
             }
         }
     }

@@ -9,8 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-
-
 namespace Asteroids
 {
     /// <summary>
@@ -114,7 +112,8 @@ namespace Asteroids
                 return;
             }
 
-            camera.Update(Mouse.GetState(), keyboardState, gamePadState);
+            ship.Update(Mouse.GetState(), keyboardState, gamePadState);
+            camera.Update();
 
             base.Update(gameTime);
         }

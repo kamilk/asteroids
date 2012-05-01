@@ -43,46 +43,9 @@ namespace Asteroids
 
             Mouse.SetPosition(viewPort.Width/2, viewPort.Height/2);
             originalMouseState = Mouse.GetState();
-        }        
-
-        public void Update(MouseState currentMouseState, KeyboardState keyboardState, GamePadState gamePadState)
-        {
-            float updownRotation = 0.0f;
-            float leftrightRotation = 0.0f;
-            float speed = 0.0f;
-
-            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
-            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
-
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
-                updownRotation = -0.05f;
-            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
-                updownRotation = 0.05f;
-            if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
-                leftrightRotation = -0.05f;
-            if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
-                leftrightRotation = 0.05f;
-            if (keyboardState.IsKeyDown(Keys.RightShift) || keyboardState.IsKeyDown(Keys.LeftShift))
-                speed = -1;
-
-            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
-            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
-
-            Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), leftrightRotation);
-            ship.SpacecraftRotation = ship.SpacecraftRotation * additionalRotation;
-
-            AddToSpacecraftPosition(new Vector3(0, 0, speed));
         }
 
-        private void AddToSpacecraftPosition(Vector3 vectorToAdd)
-        {
-            float moveSpeed = 0.05f;
-            Vector3 rotatedVector = Vector3.Transform(vectorToAdd, ship.SpacecraftRotation);
-            ship.SpacecraftPosition += moveSpeed * rotatedVector;
-            UpdateViewMatrix();
-        }
-
-        private void UpdateViewMatrix()
+        public void Update()
         {
             Vector3 cameraOriginalPosition = new Vector3(0, 0, 1);
             Vector3 cameraRotatedPosition = Vector3.Transform(cameraOriginalPosition, ship.SpacecraftRotation);
@@ -120,7 +83,7 @@ namespace Asteroids
             get { return cameraPosition; }
             set { 
                 cameraPosition = value;
-                UpdateViewMatrix();
+                Update();
             }
         }
         public Vector3 TargetPosition

@@ -112,7 +112,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="AsteroidsGame.cs" />
-    <Compile Include="QuakeCamera.cs" />
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpaceshipCamera.cs" />
     <Compile Include="Sphere.cs" />

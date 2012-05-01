@@ -21,6 +21,6 @@ namespace Asteroids
         {
             get; set; 
         }
-        void Update(MouseState currentMouseState, KeyboardState keyState, GamePadState gamePadState);
+        void Update();
     }
 }

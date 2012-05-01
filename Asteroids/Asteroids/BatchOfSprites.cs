@@ -11,7 +11,7 @@ namespace Asteroids
     {
         private GraphicsDevice device;
         private const int MaxSprites = 100;
-        private VertexPositionColorTexture[] spriteVertices = new VertexPositionColorTexture[MaxSprites * 6];
+        private SpriteCornerVertex[] spriteVertices = new SpriteCornerVertex[MaxSprites * 6];
         private int firstActiveSprite;
         private int firstFreeSprite;
         private VertexBuffer vertexBuffer;
@@ -20,7 +20,7 @@ namespace Asteroids
         public BatchOfSprites(GraphicsDevice device)
         {
             this.device = device;
-            vertexBuffer = new VertexBuffer(device, VertexPositionColorTexture.VertexDeclaration, MaxSprites * 6, BufferUsage.WriteOnly);
+            vertexBuffer = new VertexBuffer(device, SpriteCornerVertex.VertexDeclaration, MaxSprites * 6, BufferUsage.WriteOnly);
 
             firstActiveSprite = -1;
             firstFreeSprite = 0;
@@ -57,19 +57,19 @@ namespace Asteroids
         private void AddSpriteAtIndex(int idx, Vector3 position)
         {
             int baseIdx = idx * 6;
-            spriteVertices[baseIdx + 0] = new VertexPositionColorTexture(new Vector3(-0.5f, -0.5f, 0.0f) + position, Color.White, new Vector2(0.0f, 0.0f));
-            spriteVertices[baseIdx + 1] = new VertexPositionColorTexture(new Vector3(-0.5f, 0.5f, 0.0f) + position, Color.White, new Vector2(0.0f, 1.0f));
-            spriteVertices[baseIdx + 2] = new VertexPositionColorTexture(new Vector3(0.5f, 0.5f, 0.0f) + position, Color.White, new Vector2(1.0f, 1.0f));
+            spriteVertices[baseIdx + 0] = new SpriteCornerVertex(new Vector2(-0.5f, -0.5f), position, Color.White, 1.0f, 0.0f);
+            spriteVertices[baseIdx + 1] = new SpriteCornerVertex(new Vector2(-0.5f, 0.5f), position, Color.White, 1.0f, 0.0f);
+            spriteVertices[baseIdx + 2] = new SpriteCornerVertex(new Vector2(0.5f, 0.5f), position, Color.White, 1.0f, 0.0f);
 
-            spriteVertices[baseIdx + 3] = new VertexPositionColorTexture(new Vector3(-0.5f, -0.5f, 0.0f) + position, Color.White, new Vector2(0.0f, 0.0f));
-            spriteVertices[baseIdx + 4] = new VertexPositionColorTexture(new Vector3(0.5f, 0.5f, 0.0f) + position, Color.White, new Vector2(1.0f, 1.0f));
-            spriteVertices[baseIdx + 5] = new VertexPositionColorTexture(new Vector3(0.5f, -0.5f, 0.0f) + position, Color.White, new Vector2(1.0f, 0.0f));
+            spriteVertices[baseIdx + 3] = new SpriteCornerVertex(new Vector2(-0.5f, -0.5f), position, Color.White, 1.0f, 0.0f);
+            spriteVertices[baseIdx + 4] = new SpriteCornerVertex(new Vector2(0.5f, 0.5f), position, Color.White, 1.0f, 0.0f);
+            spriteVertices[baseIdx + 5] = new SpriteCornerVertex(new Vector2(0.5f, -0.5f), position, Color.White, 1.0f, 0.0f);
         }
 
         private void LoadIntoVertexBuffer(VertexBuffer vertexBuffer)
         {
             int count = GetVertexCount();
-            vertexBuffer.SetData<VertexPositionColorTexture>(spriteVertices, firstActiveSprite*6, count);
+            vertexBuffer.SetData<SpriteCornerVertex>(spriteVertices, firstActiveSprite * 6, count);
             isVertexBufferUpToDate = true;
         }
 

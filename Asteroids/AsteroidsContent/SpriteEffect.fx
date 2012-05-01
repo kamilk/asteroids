@@ -18,14 +18,16 @@ sampler Sampler = sampler_state
 
 struct VertexShaderInput
 {
-    float4 Position : POSITION0;
+	float2 Corner : POSITION0;
+	float4 ParticleCenter : POSITION1;
 	float4 Color : COLOR;
-	float2 TexCoord : TEXCOORD0;
+	float Size : POINTSIZE0;
+	float Rotation : POINTSIZE1;
 };
 
 struct VertexShaderOutput
 {
-    float4 Position : POSITION0;
+	float4 Position : POSITION0;
 	float4 Color : COLOR;
 	float2 TexCoord : TEXCOORD0;
 };
@@ -34,10 +36,12 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
     VertexShaderOutput output;
 
-    float4 worldPosition = mul(input.Position, World);
+	float4 position = input.ParticleCenter + float4(input.Corner, 0, 0);
+
+    float4 worldPosition = mul(position, World);
     float4 viewPosition = mul(worldPosition, View);
     output.Position = mul(viewPosition, Projection);
-	output.TexCoord = input.TexCoord;
+	output.TexCoord = input.Corner + 0.5;
 	output.Color = input.Color;
 
     return output;

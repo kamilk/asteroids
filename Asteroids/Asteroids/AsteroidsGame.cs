@@ -40,6 +40,7 @@ namespace Asteroids
 
         private Sprite sprite1;
         private Sprite sprite2;
+        private Sprite sprite3;
 
         public AsteroidsGame()
         {
@@ -100,7 +101,7 @@ namespace Asteroids
             batchOfSprites = new BatchOfSprites(device);
             sprite1 = new Sprite(Vector3.Zero, 1.0f);
             sprite2 = new Sprite(new Vector3(3.0f, 4.0f, 1.0f), 2.0f, Color.Blue, 0.5f);
-            Sprite sprite3 = new Sprite(new Vector3(-3.0f, 1.0f, 1.0f), 2.0f, Color.Green, -0.5f);
+            sprite3 = new Sprite(new Vector3(-3.0f, 1.0f, 1.0f), 2.0f, Color.Green, -0.5f);
             batchOfSprites.AddSprite(sprite1);
             batchOfSprites.AddSprite(sprite2);
             batchOfSprites.AddSprite(sprite3);
@@ -133,8 +134,17 @@ namespace Asteroids
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
 
-            float displacement = 3.0f * (float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
-            sprite2.Position.X += displacement;
+            if (sprite2 != null)
+            {
+                float displacement = 3.0f * (float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
+                sprite2.Position.X += displacement;
+                if (sprite2.Position.X > 20.0f)
+                {
+                    batchOfSprites.RemoveSprite(sprite2);
+                    sprite2 = null;
+                    batchOfSprites.AddSprite(sprite3);
+                }
+            }
 
             base.Update(gameTime);
         }

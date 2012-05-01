@@ -80,6 +80,7 @@ namespace Asteroids
         public void DrawBatchOfSprites(BatchOfSprites batch)
         {
             device.SetVertexBuffer(batch.GetVertexBuffer());
+            device.Indices = batch.GetIndexBuffer();
 
             effect.Parameters["World"].SetValue(Matrix.Identity);
 

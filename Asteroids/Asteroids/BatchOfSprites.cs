@@ -53,24 +53,21 @@ namespace Asteroids
 
         public void RemoveSprite(Sprite sprite)
         {
-            try
-            {
-                int index = spriteIndices[sprite];
-                spriteIndices.Remove(sprite);
-                sprite.PropertyChanged -= onSpriteChanged;
+            int index;
+            if (!spriteIndices.TryGetValue(sprite, out index))
+                return;
+            spriteIndices.Remove(sprite);
+            sprite.PropertyChanged -= onSpriteChanged;
 
-                //if we're removing the first or the last sprite in the vertex buffer, 
-                //we may simply do it by moving pointers. If we're removing a sprite from
-                //the middle of the buffer, we will need to rebuild the vertex buffer
-                if (index == firstActiveSprite)
-                    firstActiveSprite++;
-                else if (index == firstFreeSprite - 1)
-                    firstFreeSprite--;
-                else
-                    RebuildVertexArray();
-            }
-            catch (KeyNotFoundException)
-            { }
+            //if we're removing the first or the last sprite in the vertex buffer, 
+            //we may simply do it by moving pointers. If we're removing a sprite from
+            //the middle of the buffer, we will need to rebuild the vertex buffer
+            if (index == firstActiveSprite)
+                firstActiveSprite++;
+            else if (index == firstFreeSprite - 1)
+                firstFreeSprite--;
+            else
+                RebuildVertexArray();
         }
 
         private void RebuildVertexArray()

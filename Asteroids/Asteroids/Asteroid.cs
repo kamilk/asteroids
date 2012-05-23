@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
-    class Sphere
+    class Asteroid
     {
         Model model;
 
@@ -18,7 +18,7 @@ namespace Asteroids
             set { model = value; }
         }
         Matrix[] transforms;
-        Quaternion sphereRotation;
+        Quaternion rotation;
         Matrix worldMatrix;
 
         public Matrix WorldMatrix
@@ -27,30 +27,40 @@ namespace Asteroids
             set { worldMatrix = value; }
         }
 
-        public Quaternion SphereRotation
+        public Quaternion Rotation
         {
-            get { return sphereRotation; }
-            set { sphereRotation = value; }
+            get { return rotation; }
+            set { rotation = value; }
         }
-        Vector3 spherePosition;
+        Vector3 asteroidPosition;
+        private float scale;
 
-        public Vector3 SpherePosition
+        public Vector3 Position
         {
-            get { return spherePosition; }
-            set { spherePosition = value; }
+            get { return asteroidPosition; }
+            set { asteroidPosition = value; }
         }
 
-        public Sphere(ContentManager content)
+        public Asteroid(ContentManager content, float scale = 1.0f)
         {
-            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "ship", content);
-            spherePosition = new Vector3(0, 0, 0);
-            sphereRotation = Quaternion.Identity;
+            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "LargeAsteroid", content);
+            asteroidPosition = new Vector3(0, 0, 0);
+            rotation = Quaternion.Identity;
+            this.scale = scale;
+        }
+
+        public void Update()
+        {
+            float moveSpeed = 0.05f;
+            Vector3 moveVector = new Vector3(0, 0, 1);
+            rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.002f) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), 0.005f) * Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.003f);
+            Position += moveSpeed * moveVector;
         }
 
         public void Draw(ICamera fpsCam)
         {
             model.CopyAbsoluteBoneTransformsTo(transforms);
-            worldMatrix = Matrix.CreateScale(1.0f / 1000.0f) * Matrix.CreateFromQuaternion(sphereRotation) * Matrix.CreateTranslation(spherePosition);
+            worldMatrix = Matrix.CreateScale(scale) * Matrix.CreateFromQuaternion(Rotation) * Matrix.CreateTranslation(Position);
 
             foreach (ModelMesh mesh in model.Meshes)
             {
@@ -68,7 +78,7 @@ namespace Asteroids
 
         public void AddRotation(Quaternion additionalRotation)
         {
-            sphereRotation = sphereRotation * additionalRotation;
+            Rotation = Rotation * additionalRotation;
         }
     }
 }

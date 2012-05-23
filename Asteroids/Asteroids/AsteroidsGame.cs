@@ -28,7 +28,7 @@ namespace Asteroids
         ICamera camera;
 
         Spaceship ship;
-        Sphere[] planets = new Sphere[NUM_PLANETS];
+        Asteroid[] asteroids = new Asteroid[NUM_PLANETS];
         Sphere[] stars = new Sphere[NUM_STARS];
 
         CoordCross coordCross;
@@ -85,13 +85,13 @@ namespace Asteroids
 
             // Create a new SpriteBatch, which can be used to draw textures.
 
-            planets[0] = new Sphere(Content);
-            planets[1] = new Sphere(Content);
-            planets[2] = new Sphere(Content);
+            asteroids[0] = new Asteroid(Content);
+            asteroids[1] = new Asteroid(Content);
+            asteroids[2] = new Asteroid(Content, 10f);
 
-            planets[0].SpherePosition = new Vector3(10, 10, 10);
-            planets[1].SpherePosition = new Vector3(-10, 30, -20);
-            planets[2].SpherePosition = new Vector3(100, -40, 70);
+            asteroids[0].Position = new Vector3(0, 0, -10);
+            asteroids[1].Position = new Vector3(-10, 30, -20);
+            asteroids[2].Position = new Vector3(30, -40, 35);
 
             stars[0] = new Sphere(Content);
             stars[1] = new Sphere(Content);
@@ -139,6 +139,7 @@ namespace Asteroids
 
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
+            asteroids[0].Update();
 
             if (sprite2 != null)
             {
@@ -187,8 +188,8 @@ namespace Asteroids
 
             for (int i = 0; i < NUM_PLANETS; ++i)
             {
-                planets[i].Draw(camera);
-                if (XNAUtils.ModelsCollide(planets[i].Model, planets[i].WorldMatrix, ship.Model, ship.WorldMatrix))
+                asteroids[i].Draw(camera);
+                if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, ship.Model, ship.WorldMatrix))
                     anyColision = true;
             }
 
@@ -203,14 +204,15 @@ namespace Asteroids
                 Window.Title = "Asteroids - Kolizja";
             else
                 Window.Title = "Asteroids";
-                
+
             spriteDrawer.Begin(camera);
             spriteDrawer.SetTexture(spriteTexture);
             spriteDrawer.DrawBatchOfSprites(batchOfSprites);
             spriteDrawer.End();
 
             spBatch.Begin();
-            spBatch.DrawString(spFont, "Hello World", new Vector2(50.0f, 50.0f), Color.Red);
+            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f}", ship.SpacecraftPosition.X,
+                ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
 
             base.Draw(gameTime);

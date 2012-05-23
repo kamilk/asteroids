@@ -85,9 +85,9 @@ namespace Asteroids
 
             // Create a new SpriteBatch, which can be used to draw textures.
 
-            asteroids[0] = new Asteroid(Content);
-            asteroids[1] = new Asteroid(Content);
-            asteroids[2] = new Asteroid(Content, 10f);
+            asteroids[0] = new Asteroid(Content, ship, new Vector3(0, 0, 1));
+            asteroids[1] = new Asteroid(Content, ship, new Vector3(0, 1, 1));
+            asteroids[2] = new Asteroid(Content, ship, new Vector3(1, 1, 1));
 
             asteroids[0].Position = new Vector3(0, 0, -10);
             asteroids[1].Position = new Vector3(-10, 30, -20);
@@ -140,6 +140,8 @@ namespace Asteroids
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
             asteroids[0].Update();
+            asteroids[1].Update();
+            asteroids[2].Update();
 
             if (sprite2 != null)
             {

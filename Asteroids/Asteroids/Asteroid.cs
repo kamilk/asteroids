@@ -34,6 +34,8 @@ namespace Asteroids
         }
         Vector3 asteroidPosition;
         private float scale;
+        Spaceship ship;
+        Vector3 moveVector;
 
         public Vector3 Position
         {
@@ -41,20 +43,33 @@ namespace Asteroids
             set { asteroidPosition = value; }
         }
 
-        public Asteroid(ContentManager content, float scale = 1.0f)
+        public Asteroid(ContentManager content, Spaceship ship, Vector3 moveVector, float scale = 1.0f)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "LargeAsteroid", content);
             asteroidPosition = new Vector3(0, 0, 0);
             rotation = Quaternion.Identity;
+            this.ship = ship;
             this.scale = scale;
+            this.moveVector = moveVector;
         }
 
         public void Update()
         {
             float moveSpeed = 0.05f;
-            Vector3 moveVector = new Vector3(0, 0, 1);
             rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.002f) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), 0.005f) * Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.003f);
-            Position += moveSpeed * moveVector;
+
+            float maxDistance = 70;
+
+            foreach (Vector3 direction in new Vector3[] { new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1) })
+            {
+                Vector3 asteroidToShip = asteroidPosition - ship.SpacecraftPosition;
+                if (((asteroidToShip + moveSpeed * moveVector) * direction).Length() > maxDistance)
+                {
+                    Vector3 reverseDirection = ship.SpacecraftPosition - ((asteroidToShip * direction).Length() * Vector3.One / asteroidToShip) * maxDistance;
+                    asteroidPosition = reverseDirection * direction + asteroidPosition * (Vector3.One - direction);
+                }
+            }
+            asteroidPosition += moveSpeed * moveVector;
         }
 
         public void Draw(ICamera fpsCam)

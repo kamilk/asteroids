@@ -195,5 +195,24 @@ namespace Asteroids
                         return true;
             return collision;
         }
+
+        public static float CalculateVectorLengthWithInertia(bool increasing, bool decreasing, float currentValue, float increaseStep, float decreaseStep, float maxValue)
+        {
+            if (increasing)
+                return (currentValue >= maxValue) ? maxValue : currentValue + increaseStep;
+            else if (decreasing)
+                return (currentValue <= -maxValue) ? -maxValue : currentValue - increaseStep;
+            else
+            {
+                if (currentValue >= decreaseStep)
+                {
+                    return currentValue - decreaseStep;
+                }
+                else if (currentValue <= -decreaseStep)
+                    return currentValue + decreaseStep;
+                else
+                    return 0;
+            }
+        }
     }
 }

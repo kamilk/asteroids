@@ -42,6 +42,9 @@ namespace Asteroids
         private Sprite sprite2;
         private Sprite sprite3;
 
+        SpriteFont spFont;
+        SpriteBatch spBatch;
+
         public AsteroidsGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -106,6 +109,9 @@ namespace Asteroids
             batchOfSprites.AddSprite(sprite2);
             batchOfSprites.AddSprite(sprite3);
             batchOfSprites.RemoveSprite(sprite3);
+
+            spFont = Content.Load<SpriteFont>(@"Arial");
+            spBatch = new SpriteBatch(graphics.GraphicsDevice);
         }
 
         /// <summary>
@@ -202,6 +208,10 @@ namespace Asteroids
             spriteDrawer.SetTexture(spriteTexture);
             spriteDrawer.DrawBatchOfSprites(batchOfSprites);
             spriteDrawer.End();
+
+            spBatch.Begin();
+            spBatch.DrawString(spFont, "Hello World", new Vector2(50.0f, 50.0f), Color.Red);
+            spBatch.End();
 
             base.Draw(gameTime);
         }

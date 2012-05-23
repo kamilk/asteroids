@@ -22,7 +22,10 @@ namespace Asteroids
         Quaternion spacecraftRotation;
         Matrix worldMatrix;
 
-        float velocity;
+        float updownRotation = 0.0f;
+        float leftrightRotation = 0.0f;
+
+        float velocity = 0;
 
         public float Velocity
         {
@@ -84,42 +87,37 @@ namespace Asteroids
 
         public void Update(MouseState currentMouseState, KeyboardState keyboardState, GamePadState gamePadState)
         {
-            float updownRotation = 0.0f;
-            float leftrightRotation = 0.0f;
-            float speed = 0.0f;
+            float maxUpDownRotation = 0.03f;
+            float upDownIncreaseStep = maxUpDownRotation / 30;
+            float upDownDecreaseStep = maxUpDownRotation / 120;
+
+            float maxLeftRightRotation = 0.05f;
+            float leftRightIncreaseStep = maxUpDownRotation / 30;
+            float leftRightDecreaseStep = maxUpDownRotation / 30;
 
             leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
             updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
 
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
-                updownRotation = -0.05f;
-            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
-                updownRotation = 0.05f;
-            if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
-                leftrightRotation = -0.05f;
-            if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
-                leftrightRotation = 0.05f;
+            updownRotation = XNAUtils.CalculateVectorLengthWithInertia(keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S),
+                keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W),
+                updownRotation, upDownIncreaseStep, upDownDecreaseStep, maxUpDownRotation);
+
+            leftrightRotation = XNAUtils.CalculateVectorLengthWithInertia(keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A),
+                keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D),
+                leftrightRotation, leftRightIncreaseStep, leftRightDecreaseStep, maxLeftRightRotation);
+
+
             if (keyboardState.IsKeyDown(Keys.RightShift) || keyboardState.IsKeyDown(Keys.LeftShift))
-            {
                 Velocity = (Velocity >= 5) ? 5 : Velocity + 0.1f;
-            }
             else if (keyboardState.IsKeyDown(Keys.Z))
-            {
                 Velocity = (Velocity <= 0.1) ? 0 : Velocity - 0.1f;
-            }
             else
-            {
                 Velocity = (Velocity <= 0.3) ? 0.2f : Velocity - 0.02f;
-            }
-
-
-            leftrightRotation -= gamePadState.ThumbSticks.Left.X / 50.0f;
-            updownRotation += gamePadState.ThumbSticks.Left.Y / 50.0f;
 
             Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), leftrightRotation);
             SpacecraftRotation = SpacecraftRotation * additionalRotation;
 
-            AddToSpacecraftPosition(new Vector3(0, 0, -Velocity));
+            AddToSpacecraftPosition(new Vector3(updownRotation, 0, -Velocity));
         }
 
         private void AddToSpacecraftPosition(Vector3 vectorToAdd)

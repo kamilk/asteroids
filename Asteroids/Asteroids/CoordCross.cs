@@ -42,11 +42,11 @@ namespace Asteroids
             vertices[11] = new VertexPositionColor(new Vector3(-0.5f, 4.5f, 0), Color.White);
 
             vertices[12] = new VertexPositionColor(new Vector3(0, 0, 0), Color.White);
-            vertices[13] = new VertexPositionColor(Vector3.Forward * 5, Color.White);
-            vertices[14] = new VertexPositionColor(new Vector3(0, 0, -5), Color.White);
-            vertices[15] = new VertexPositionColor(new Vector3(0, 0.5f, -4.5f), Color.White);
-            vertices[16] = new VertexPositionColor(new Vector3(0, 0, -5), Color.White);
-            vertices[17] = new VertexPositionColor(new Vector3(0, -0.5f, -4.5f), Color.White);
+            vertices[13] = new VertexPositionColor(-Vector3.Forward * 5, Color.White);
+            vertices[14] = new VertexPositionColor(new Vector3(0, 0, 5), Color.White);
+            vertices[15] = new VertexPositionColor(new Vector3(0, 0.5f, 4.5f), Color.White);
+            vertices[16] = new VertexPositionColor(new Vector3(0, 0, 5), Color.White);
+            vertices[17] = new VertexPositionColor(new Vector3(0, -0.5f, 4.5f), Color.White);
         }
 
         public void Draw(Matrix viewMatrix, Matrix projectionMatrix)

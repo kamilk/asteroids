@@ -56,7 +56,7 @@ namespace Asteroids
         public Spaceship(ContentManager content)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "ship", content);
-            spacecraftPosition = new Vector3(-1, 1, 10);
+            spacecraftPosition = new Vector3(-1, 1, 5);
             spacecraftRotation = Quaternion.Identity;
             velocity = 0;
         }

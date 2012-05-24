@@ -30,6 +30,7 @@ namespace Asteroids
         Spaceship ship;
         Asteroid[] asteroids = new Asteroid[NUM_PLANETS];
         Sphere[] stars = new Sphere[NUM_STARS];
+        IList<Missile> missiles = new List<Missile>();
 
         CoordCross coordCross;
         BasicEffect basicEffect;
@@ -93,6 +94,8 @@ namespace Asteroids
             asteroids[1].Position = new Vector3(-10, 30, -20);
             asteroids[2].Position = new Vector3(30, -40, 35);
 
+            missiles.Add(new Missile(Content, ship, new Vector3(1, 20, 1), new Vector3(0, 0, 0)));
+
             stars[0] = new Sphere(Content);
             stars[1] = new Sphere(Content);
 
@@ -142,6 +145,10 @@ namespace Asteroids
             asteroids[0].Update();
             asteroids[1].Update();
             asteroids[2].Update();
+            foreach(Missile missile in missiles)
+            {
+                missile.Update();
+            }
 
             if (sprite2 != null)
             {
@@ -200,6 +207,10 @@ namespace Asteroids
                 stars[i].Draw(camera);
                 if (XNAUtils.ModelsCollide(stars[i].Model, stars[i].WorldMatrix, ship.Model, ship.WorldMatrix))
                     anyColision = true;
+            }
+            foreach(Missile missile in missiles)
+            {
+                missile.Draw(camera);
             }
 
             if (anyColision)

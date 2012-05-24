@@ -128,10 +128,25 @@ namespace Asteroids
             spriteDrawer = null;
         }
 
+        private bool spaceDown = false;
+
         protected override void Update(GameTime gameTime)
         {
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState keyboardState = Keyboard.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.Space))
+            {
+                if (spaceDown == false)
+                {
+                    spaceDown = true;
+                    missiles.Add(new Missile(Content, ship));
+                }
+            }
+            else
+            {
+                spaceDown = false;
+            }
 
             // Check to see if the user has exited
             if (checkExitKey(keyboardState, gamePadState))

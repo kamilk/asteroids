@@ -63,62 +63,27 @@ namespace Asteroids
             Vector2 ZX = new Vector2(moveVector.Z, moveVector.X);
 
             rotation = Quaternion.Identity;
-            {
-                float angle = (float)Math.Asin(moveVector.X / ZX.Length());
-                if (moveVector.Z < 0)
-                    angle = MathHelper.Pi - angle;
-                rotation *= Quaternion.CreateFromAxisAngle(Vector3.Up, angle + MathHelper.PiOver2);
-            }
-            {
-                float angle = (float)Math.Asin(moveVector.Y / moveVector.Length());
-                rotation *= Quaternion.CreateFromAxisAngle(Vector3.Forward, angle);
-            }
+            float horizontalAngle = (float)Math.Asin(moveVector.X / ZX.Length());
+            if (moveVector.Z < 0)
+                horizontalAngle = MathHelper.Pi - horizontalAngle;
+            rotation *= Quaternion.CreateFromAxisAngle(Vector3.Up, horizontalAngle + MathHelper.PiOver2);
+            float verticalAngle = (float)Math.Asin(moveVector.Y / moveVector.Length());
+            rotation *= Quaternion.CreateFromAxisAngle(Vector3.Forward, verticalAngle);
             this.ship = ship;
             this.scale = 0.1f;
             this.moveVector = moveVector;
             this.position = position;
         }
 
-        private Quaternion GetRotation(Vector3 src, Vector3 dest)
+        public Missile(ContentManager content, Spaceship ship)
+            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
         {
-            src.Normalize();
-            dest.Normalize();
-
-            float d = Vector3.Dot(src, dest);
-
-            if (d >= 1f)
-            {
-                return Quaternion.Identity;
-            }
-            else if (d < (1e-6f - 1.0f))
-            {
-                Vector3 axis = Vector3.Cross(Vector3.UnitX, src);
-
-                if (axis.LengthSquared() == 0)
-                {
-                    axis = Vector3.Cross(Vector3.UnitY, src);
-                }
-
-                axis.Normalize();
-                return Quaternion.CreateFromAxisAngle(axis, MathHelper.Pi);
-            }
-            else
-            {
-                float s = (float)Math.Sqrt((1 + d) * 2);
-                float invS = 1 / s;
-
-                Vector3 c = Vector3.Cross(src, dest);
-                Quaternion q = new Quaternion(invS * c, 0.5f * s);
-                q.Normalize();
-
-                return q;
-            }
         }
 
         public void Update()
         {
-            float moveSpeed = 0.0125f;
-            //rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.01f);
+            float moveSpeed = 0.3f;
+            rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.01f);
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this);

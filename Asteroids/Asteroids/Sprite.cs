@@ -71,11 +71,15 @@ namespace Asteroids
 
             hash = new Random().Next();
 
-            _Position.PropertyChanged += new PropertyChangedEventHandler(OnPositionChanged);
+            _Position.Changed += new EventHandler(OnPositionChanged);
         }
 
         public Sprite(Vector3 position, float size)
             : this(position, size, Color.White)
+        { }
+
+        public Sprite()
+            : this(Vector3.Zero, 1.0f)
         { }
 
         public override int GetHashCode()
@@ -83,7 +87,7 @@ namespace Asteroids
             return hash;
         }
 
-        private void OnPositionChanged(object sender, PropertyChangedEventArgs e)
+        private void OnPositionChanged(object sender, EventArgs e)
         {
             NotifyPropertyChanged("Position");
         }

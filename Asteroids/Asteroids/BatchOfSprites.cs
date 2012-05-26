@@ -45,7 +45,7 @@ namespace Asteroids
                 throw new Exception("The batch of sprites cannot contain more sprites.");
 
             AddSpriteAtIndex(index, sprite);
-            sprite.PropertyChanged += new PropertyChangedEventHandler(onSpriteChanged);
+            sprite.PropertyChanged += new PropertyChangedEventHandler(OnSpriteChanged);
             isVertexBufferUpToDate = false;
 
             spriteIndices.Add(sprite, index);
@@ -57,7 +57,7 @@ namespace Asteroids
             if (!spriteIndices.TryGetValue(sprite, out index))
                 return;
             spriteIndices.Remove(sprite);
-            sprite.PropertyChanged -= onSpriteChanged;
+            sprite.PropertyChanged -= OnSpriteChanged;
 
             //if we're removing the first or the last sprite in the vertex buffer, 
             //we may simply do it by moving pointers. If we're removing a sprite from
@@ -101,7 +101,7 @@ namespace Asteroids
         private void AddSpriteAtIndex(int idx, Sprite sprite)
         {
             int baseIdx = idx * 4;
-            Vector3 position = sprite.Position.GetVector3();
+            Vector3 position = sprite.Position.UnderlyingVector;
             Color color = sprite.Color;
             float size = sprite.Size;
             float rotation = sprite.Rotation;
@@ -128,7 +128,7 @@ namespace Asteroids
             return 2 * (firstFreeSprite - firstActiveSprite);
         }
 
-        private void onSpriteChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSpriteChanged(object sender, PropertyChangedEventArgs e)
         {
             var sprite = sender as Sprite;
             if (sprite == null)

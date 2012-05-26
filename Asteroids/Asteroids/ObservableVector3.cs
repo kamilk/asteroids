@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Asteroids
 {
-    class ObservableVector3 : INotifyPropertyChanged
+    class ObservableVector3
     {
         private Vector3 vector;
 
@@ -20,7 +20,7 @@ namespace Asteroids
             set
             {
                 vector.X = value;
-                NotifyPropertyChanged("X");
+                NotifyChanged();
             }
         }
 
@@ -33,7 +33,7 @@ namespace Asteroids
             set
             {
                 vector.Y = value;
-                NotifyPropertyChanged("Y");
+                NotifyChanged();
             }
         }
 
@@ -46,26 +46,36 @@ namespace Asteroids
             set
             {
                 vector.Z = value;
-                NotifyPropertyChanged("Z");
+                NotifyChanged();
             }
         }
+
+        public Vector3 UnderlyingVector
+        {
+            get { return vector; }
+            set
+            {
+                vector = value;
+                NotifyChanged();
+            }
+        }
+
+        public event EventHandler Changed;
 
         public ObservableVector3(Vector3 vector)
         {
             this.vector = vector;
         }
 
-        public Vector3 GetVector3()
+        public void Set(ObservableVector3 value)
         {
-            return vector;
+            UnderlyingVector = value.UnderlyingVector;
         }
 
-        private void NotifyPropertyChanged(string paramName)
+        private void NotifyChanged()
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(paramName));
+            if (Changed != null)
+                Changed(this, new EventArgs());
         }
-    
-        public event PropertyChangedEventHandler  PropertyChanged;
     }
 }

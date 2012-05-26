@@ -115,6 +115,9 @@
     <Compile Include="Missile.cs" />
     <Compile Include="ModelUtils.cs" />
     <Compile Include="ObservableVector3.cs" />
+    <Compile Include="Particle.cs" />
+    <Compile Include="ParticleEffect.cs" />
+    <Compile Include="ParticleSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="AsteroidsGame.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Sphere.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteCornerVertex.cs" />
+    <Compile Include="SpriteManager.cs" />
     <Compile Include="XNAUtils.cs" />
     <Compile Include="SpriteDrawer.cs">
       <SubType>Code</SubType>

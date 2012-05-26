@@ -19,11 +19,10 @@ namespace Asteroids
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
         SpriteDrawer spriteDrawer;
-        Texture2D spriteTexture;
+        SpriteManager spriteManager;
 
         Model skyboxModel;
         Matrix[] skyboxTransforms;
-
 
         ICamera camera;
 
@@ -37,7 +36,6 @@ namespace Asteroids
 
         const int NUM_PLANETS = 3;
         const int NUM_STARS = 2;
-        private BatchOfSprites batchOfSprites;
 
         private Sprite sprite1;
         private Sprite sprite2;
@@ -103,15 +101,23 @@ namespace Asteroids
             stars[1].SpherePosition = new Vector3(40, 20, -20);
 
             spriteDrawer = new SpriteDrawer(device, Content);
-            spriteTexture = Content.Load<Texture2D>("sprite");
-            batchOfSprites = new BatchOfSprites(device);
-            sprite1 = new Sprite(Vector3.Zero, 1.0f);
-            sprite2 = new Sprite(new Vector3(3.0f, 4.0f, 1.0f), 2.0f, Color.Blue, 0.5f);
-            sprite3 = new Sprite(new Vector3(-3.0f, 1.0f, 1.0f), 2.0f, Color.Green, -0.5f);
-            batchOfSprites.AddSprite(sprite1);
-            batchOfSprites.AddSprite(sprite2);
-            batchOfSprites.AddSprite(sprite3);
-            batchOfSprites.RemoveSprite(sprite3);
+            spriteManager = new SpriteManager(device, Content);
+            
+            sprite1 = spriteManager.CreateSprite("sprite");
+            sprite1.Position.UnderlyingVector = Vector3.Zero;
+            sprite1.Size = 1.0f;
+
+            sprite2 = spriteManager.CreateSprite("sprite");
+            sprite2.Position.UnderlyingVector = new Vector3(3.0f, 4.0f, 1.0f);
+            sprite2.Size = 0.5f;
+            sprite2.Color = Color.Blue;
+
+            sprite3 = spriteManager.CreateSprite("sprite");
+            sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
+            sprite3.Size = 2.0f;
+            sprite3.Color = Color.Green;
+
+            spriteManager.DeleteSprite(sprite3);
 
             spFont = Content.Load<SpriteFont>(@"Arial");
             spBatch = new SpriteBatch(graphics.GraphicsDevice);
@@ -171,9 +177,13 @@ namespace Asteroids
                 sprite2.Position.X += displacement;
                 if (sprite2.Position.X > 20.0f)
                 {
-                    batchOfSprites.RemoveSprite(sprite2);
+                    spriteManager.DeleteSprite(sprite2);
                     sprite2 = null;
-                    batchOfSprites.AddSprite(sprite3);
+
+                    sprite3 = spriteManager.CreateSprite("sprite");
+                    sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
+                    sprite3.Size = 2.0f;
+                    sprite3.Color = Color.Green;
                 }
             }
 
@@ -233,10 +243,7 @@ namespace Asteroids
             else
                 Window.Title = "Asteroids";
 
-            spriteDrawer.Begin(camera);
-            spriteDrawer.SetTexture(spriteTexture);
-            spriteDrawer.DrawBatchOfSprites(batchOfSprites);
-            spriteDrawer.End();
+            spriteManager.DrawAll(spriteDrawer, camera);
 
             spBatch.Begin();
             spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f}", ship.SpacecraftPosition.X,

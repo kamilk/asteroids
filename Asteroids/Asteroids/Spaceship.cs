@@ -120,6 +120,12 @@ namespace Asteroids
             AddToSpacecraftPosition(new Vector3(updownRotation, 0, -Velocity));
         }
 
+        public Matrix GetJetOrientationMatrix()
+        {
+            var shift = new Vector3(0.0f, 0.0f, 950.0f);
+            return Matrix.Multiply(Matrix.CreateTranslation(shift), WorldMatrix);
+        }
+
         private void AddToSpacecraftPosition(Vector3 vectorToAdd)
         {
             float moveSpeed = 0.05f;

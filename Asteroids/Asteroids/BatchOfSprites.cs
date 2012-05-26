@@ -8,7 +8,7 @@ namespace Asteroids
 {
     class BatchOfSprites
     {
-        public const int MaxSprites = 100;
+        public const int MaxSprites = 1000;
 
         private GraphicsDevice device;
         private Dictionary<Sprite, int> spriteIndices = new Dictionary<Sprite, int>();

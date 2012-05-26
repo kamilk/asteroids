@@ -24,7 +24,7 @@ namespace Asteroids
         Model skyboxModel;
         Matrix[] skyboxTransforms;
 
-        ICamera camera;
+        SpaceshipCamera camera;
 
         Spaceship ship;
         Asteroid[] asteroids = new Asteroid[NUM_PLANETS];
@@ -108,7 +108,7 @@ namespace Asteroids
             
             sprite1 = spriteManager.CreateSprite("sprite");
             sprite1.Position.UnderlyingVector = Vector3.Zero;
-            sprite1.Size = 1.0f;
+            sprite1.Size = 0.03f;
 
             sprite2 = spriteManager.CreateSprite("sprite");
             sprite2.Position.UnderlyingVector = new Vector3(3.0f, 4.0f, 1.0f);
@@ -126,7 +126,7 @@ namespace Asteroids
             spBatch = new SpriteBatch(graphics.GraphicsDevice);
 
             particleSystem = new ParticleSystem(spriteManager);
-            jetParticleEffect = new JetParticleEffect(particleSystem);
+            jetParticleEffect = new JetParticleEffect(particleSystem, ship);
         }
 
         /// <summary>
@@ -191,6 +191,11 @@ namespace Asteroids
                     sprite3.Size = 2.0f;
                     sprite3.Color = Color.Green;
                 }
+            }
+
+            if (sprite1 != null)
+            {
+                sprite1.Position.UnderlyingVector = Vector3.Transform(Vector3.Zero, ship.GetJetOrientationMatrix());
             }
 
             jetParticleEffect.Update(gameTime);

@@ -32,6 +32,12 @@ namespace Asteroids
             set { Sprite.Color = value; }
         }
 
+        public Vector3 Velocity
+        {
+            get;
+            set;
+        }
+
         public Sprite Sprite
         {
             get;
@@ -47,6 +53,7 @@ namespace Asteroids
         public Particle(Sprite sprite)
         {
             this.Sprite = sprite;
+            this.Velocity = Vector3.Zero;
         }
     }
 }

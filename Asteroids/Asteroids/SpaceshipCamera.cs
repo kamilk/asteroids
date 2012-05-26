@@ -37,7 +37,7 @@ namespace Asteroids
             this.viewPort = viewPort;
 
             float viewAngle = MathHelper.PiOver4;
-            float nearPlane = 0.5f;
+            float nearPlane = 0.1f;
             float farPlane = 100.0f;
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(viewAngle, viewPort.AspectRatio, nearPlane, farPlane);
 
@@ -48,7 +48,7 @@ namespace Asteroids
 
         public void Update()
         {
-            Vector3 cameraOriginalPosition = new Vector3(0, 0, 1);
+            Vector3 cameraOriginalPosition = new Vector3(0.0f, 0.2f, 1.0f);
             Vector3 cameraRotatedPosition = Vector3.Transform(cameraOriginalPosition, ship.SpacecraftRotation);
             Vector3 cameraFinalPosition = ship.SpacecraftPosition + cameraRotatedPosition;
 

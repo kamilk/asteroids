@@ -9,8 +9,6 @@ namespace Asteroids
 {
     class Sprite : INotifyPropertyChanged
     {
-        int hash;
-
         private ObservableVector3 _Position;
         public ObservableVector3 Position
         {
@@ -69,8 +67,6 @@ namespace Asteroids
             this.Size = size;
             this.Rotation = rotation;
 
-            hash = new Random().Next();
-
             _Position.Changed += new EventHandler(OnPositionChanged);
         }
 
@@ -81,11 +77,6 @@ namespace Asteroids
         public Sprite()
             : this(Vector3.Zero, 1.0f)
         { }
-
-        public override int GetHashCode()
-        {
-            return hash;
-        }
 
         private void OnPositionChanged(object sender, EventArgs e)
         {

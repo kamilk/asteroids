@@ -8,40 +8,39 @@ namespace Asteroids
 {
     class Particle
     {
-        Sprite sprite;
-
         public float Size
         {
-            get { return sprite.Size; }
-            set { sprite.Size = value; }
+            get { return Sprite.Size; }
+            set { Sprite.Size = value; }
         }
 
         public ObservableVector3 Position
         {
-            get { return sprite.Position; }
-            set { sprite.Position.Set(value); }
+            get { return Sprite.Position; }
+            set { Sprite.Position.Set(value); }
         }
 
         public float Rotation
         {
-            get { return sprite.Rotation; }
-            set { sprite.Rotation = value; }
+            get { return Sprite.Rotation; }
+            set { Sprite.Rotation = value; }
         }
 
         public Color Color
         {
-            get { return sprite.Color; }
-            set { sprite.Color = value; }
+            get { return Sprite.Color; }
+            set { Sprite.Color = value; }
         }
 
-        public Particle()
+        public Sprite Sprite
         {
-            this.sprite = new Sprite(Vector3.Zero, 1.0f);
+            get;
+            private set;
         }
 
-        internal Sprite GetSprite()
+        public Particle(Sprite sprite)
         {
-            return sprite;
+            this.Sprite = sprite;
         }
     }
 }

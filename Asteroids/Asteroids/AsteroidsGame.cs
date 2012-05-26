@@ -44,6 +44,9 @@ namespace Asteroids
         SpriteFont spFont;
         SpriteBatch spBatch;
 
+        ParticleSystem particleSystem;
+        JetParticleEffect jetParticleEffect;
+
         public AsteroidsGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -121,6 +124,9 @@ namespace Asteroids
 
             spFont = Content.Load<SpriteFont>(@"Arial");
             spBatch = new SpriteBatch(graphics.GraphicsDevice);
+
+            particleSystem = new ParticleSystem(spriteManager);
+            jetParticleEffect = new JetParticleEffect(particleSystem);
         }
 
         /// <summary>
@@ -186,6 +192,8 @@ namespace Asteroids
                     sprite3.Color = Color.Green;
                 }
             }
+
+            jetParticleEffect.Update(gameTime);
 
             base.Update(gameTime);
         }

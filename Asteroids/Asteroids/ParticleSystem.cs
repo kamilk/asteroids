@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.Collections.Generic;
 
 namespace Asteroids
 {
@@ -14,6 +9,17 @@ namespace Asteroids
         public ParticleSystem(SpriteManager spriteManager)
         {
             this.spriteManager = spriteManager;
+        }
+
+        public Particle CreateParticle(string textureName)
+        {
+            Sprite sprite = spriteManager.CreateSprite(textureName);
+            return new Particle(sprite);
+        }
+
+        public void DeleteParticle(Particle particle)
+        {
+            spriteManager.DeleteSprite(particle.Sprite);
         }
     }
 }

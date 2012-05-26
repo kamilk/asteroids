@@ -112,6 +112,7 @@
     <Compile Include="ICamera.cs" />
     <Compile Include="CoordCross.cs" />
     <Compile Include="IModel.cs" />
+    <Compile Include="JetParticleEffect.cs" />
     <Compile Include="Missile.cs" />
     <Compile Include="ModelUtils.cs" />
     <Compile Include="ObservableVector3.cs" />

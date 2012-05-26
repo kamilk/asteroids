@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace Asteroids
@@ -30,6 +27,8 @@ namespace Asteroids
                 initialized = true;
             }
 
+            UpdateSystem(time);
+
             List<Particle> particlesToDelete = new List<Particle>();
             foreach (Particle particle in particles)
             {
@@ -50,10 +49,11 @@ namespace Asteroids
 
         protected abstract void UpdateSystem(GameTime time);
 
-        protected Particle CreateParticle(string textureName)
+        protected Particle CreateParticle(string textureName, GameTime time)
         {
             var particle = ParticleSystem.CreateParticle(textureName);
             particles.Add(particle);
+            particle.SpawnTime = time.TotalGameTime;
             return particle;
         }
     }

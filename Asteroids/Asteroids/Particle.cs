@@ -38,6 +38,12 @@ namespace Asteroids
             private set;
         }
 
+        public TimeSpan SpawnTime
+        {
+            get;
+            set;
+        }
+
         public Particle(Sprite sprite)
         {
             this.Sprite = sprite;

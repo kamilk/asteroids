@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace Asteroids
@@ -18,21 +15,21 @@ namespace Asteroids
         {
             for (int i = 0; i < 10; i++)
             {
-                var particle = CreateParticle("sprite");
+                var particle = CreateParticle("sprite", time);
                 particle.Size = 0.1f;
                 particle.Position.X = (float)random.Next(1000) / 1000.0f;
                 particle.Position.Y = 10.0f;
             }
         }
 
-        protected override bool UpdateParticle(Particle particle, Microsoft.Xna.Framework.GameTime time)
+        protected override void UpdateSystem(GameTime time)
         {
-            return true;
+
         }
 
-        protected override void UpdateSystem(Microsoft.Xna.Framework.GameTime time)
+        protected override bool UpdateParticle(Particle particle, GameTime time)
         {
-            
+            return true;
         }
     }
 }

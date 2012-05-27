@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
-    class Particle
+    public class Particle
     {
         public float Size
         {

@@ -2,7 +2,7 @@
 
 namespace Asteroids
 {
-    class ParticleSystem
+    public class ParticleSystem
     {
         private SpriteManager spriteManager;
 

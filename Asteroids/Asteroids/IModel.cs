@@ -45,7 +45,7 @@ namespace Asteroids
             get;
         }
 
-        void Update();
+        void Update(GameTime time);
         void Draw(ICamera fpsCam);
 
     }

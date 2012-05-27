@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Asteroid.cs" />
     <Compile Include="BatchOfSprites.cs" />
+    <Compile Include="MissileJetParticleEffect.cs" />
     <Compile Include="ICamera.cs" />
     <Compile Include="CoordCross.cs" />
     <Compile Include="IModel.cs" />

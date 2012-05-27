@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
-    class SpriteManager
+    public class SpriteManager
     {
         private Dictionary<string, BatchOfSprites> batchesByTexture = new Dictionary<string,BatchOfSprites>();
         private Dictionary<Sprite, BatchOfSprites> batchesBySprite = new Dictionary<Sprite, BatchOfSprites>();

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -95,8 +95,6 @@ namespace Asteroids
             asteroids[1].Position = new Vector3(-10, 30, -20);
             asteroids[2].Position = new Vector3(30, -40, 35);
 
-            missiles.Add(new Missile(Content, ship, new Vector3(1, 20, 1), new Vector3(0, 0, 0)));
-
             stars[0] = new Sphere(Content);
             stars[1] = new Sphere(Content);
 
@@ -152,7 +150,7 @@ namespace Asteroids
                 if (spaceDown == false)
                 {
                     spaceDown = true;
-                    missiles.Add(new Missile(Content, ship));
+                    missiles.Add(new Missile(Content, ship, new ParticleSystem(spriteManager)));
                 }
             }
             else
@@ -169,12 +167,12 @@ namespace Asteroids
 
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
-            asteroids[0].Update();
-            asteroids[1].Update();
-            asteroids[2].Update();
+            asteroids[0].Update(gameTime);
+            asteroids[1].Update(gameTime);
+            asteroids[2].Update(gameTime);
             foreach(Missile missile in missiles)
             {
-                missile.Update();
+                missile.Update(gameTime);
             }
 
             if (sprite2 != null)

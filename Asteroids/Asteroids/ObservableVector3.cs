@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Asteroids
 {
-    class ObservableVector3
+    public class ObservableVector3
     {
         private Vector3 vector;
 

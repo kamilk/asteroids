@@ -18,6 +18,7 @@ namespace Asteroids
         private float scale;
         private Spaceship ship;
         private Vector3 moveVector;
+        private MissileJetParticleEffect missileJetParticleEffect;
 
         public Model Model
         {
@@ -55,7 +56,7 @@ namespace Asteroids
             set { position = value; }
         }
 
-        public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position)
+        public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position, ParticleSystem system)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "missile", content);
 
@@ -73,25 +74,35 @@ namespace Asteroids
             this.scale = 0.1f;
             this.moveVector = moveVector;
             this.position = position;
+
+            this.missileJetParticleEffect = new MissileJetParticleEffect(system, this);
         }
 
-        public Missile(ContentManager content, Spaceship ship)
-            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
+        public Missile(ContentManager content, Spaceship ship, ParticleSystem system)
+            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition, system)
         {
         }
 
-        public void Update()
+        public void Update(GameTime time)
         {
             float moveSpeed = 0.3f;
             rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.01f);
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this);
+            missileJetParticleEffect.Update(time);
         }
 
         public void Draw(ICamera fpsCam)
         {
             ModelUtils.Draw(this, fpsCam);
         }
+
+        public Matrix GetJetOrientationMatrix()
+        {
+            var shift = new Vector3(0.0f, 0.0f, 950.0f);
+            return Matrix.Multiply(Matrix.CreateTranslation(shift), WorldMatrix);
+        }
+
     }
 }

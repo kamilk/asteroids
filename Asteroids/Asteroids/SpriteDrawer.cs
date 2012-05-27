@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
-    class SpriteDrawer : IDisposable
+    public class SpriteDrawer : IDisposable
     {
         private GraphicsDevice device;
         private IndexBuffer indexBuffer;

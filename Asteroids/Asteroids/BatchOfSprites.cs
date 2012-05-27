@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
-    class BatchOfSprites
+    public class BatchOfSprites
     {
         public const int MaxSprites = 1000;
 

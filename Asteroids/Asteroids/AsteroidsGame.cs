@@ -47,6 +47,8 @@ namespace Asteroids
         ParticleSystem particleSystem;
         JetParticleEffect jetParticleEffect;
 
+        Missile testMissile;
+
         public AsteroidsGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -106,7 +108,7 @@ namespace Asteroids
             
             sprite1 = spriteManager.CreateSprite("sprite");
             sprite1.Position.UnderlyingVector = Vector3.Zero;
-            sprite1.Size = 0.03f;
+            sprite1.Size = 0.1f;
 
             sprite2 = spriteManager.CreateSprite("sprite");
             sprite2.Position.UnderlyingVector = new Vector3(3.0f, 4.0f, 1.0f);
@@ -115,7 +117,7 @@ namespace Asteroids
 
             sprite3 = spriteManager.CreateSprite("sprite");
             sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
-            sprite3.Size = 2.0f;
+            sprite3.Size = 0.03f;
             sprite3.Color = Color.Green;
 
             spriteManager.DeleteSprite(sprite3);
@@ -125,6 +127,8 @@ namespace Asteroids
 
             particleSystem = new ParticleSystem(spriteManager);
             jetParticleEffect = new JetParticleEffect(particleSystem, ship);
+
+            testMissile = new Missile(Content, ship, particleSystem);
         }
 
         /// <summary>
@@ -186,14 +190,21 @@ namespace Asteroids
 
                     sprite3 = spriteManager.CreateSprite("sprite");
                     sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
-                    sprite3.Size = 2.0f;
+                    sprite3.Size = 0.05f;
                     sprite3.Color = Color.Green;
                 }
             }
 
-            if (sprite1 != null)
+            testMissile.Position = new Vector3(0.0f, 1.0f, 1.0f);
+
+            if (sprite1 != null && testMissile != null)
             {
-                sprite1.Position.UnderlyingVector = Vector3.Transform(Vector3.Zero, ship.GetJetOrientationMatrix());
+                sprite1.Position.UnderlyingVector = Vector3.Transform(Vector3.Zero, testMissile.GetJetOrientationMatrix());
+            }
+
+            if (sprite3 != null)
+            {
+                sprite3.Position.UnderlyingVector = Vector3.Transform(Vector3.Zero, ship.GetJetOrientationMatrix());
             }
 
             jetParticleEffect.Update(gameTime);
@@ -260,6 +271,8 @@ namespace Asteroids
             spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f}", ship.SpacecraftPosition.X,
                 ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
+
+            testMissile.Draw(camera);
 
             base.Draw(gameTime);
         }

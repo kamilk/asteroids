@@ -100,8 +100,8 @@ namespace Asteroids
 
         public Matrix GetJetOrientationMatrix()
         {
-            var shift = new Vector3(0.0f, 0.0f, 950.0f);
-            return Matrix.Multiply(Matrix.CreateTranslation(shift), WorldMatrix);
+            var shift = new Vector3(0.0f, 0.0f, 0.5f);
+            return Matrix.Multiply(WorldMatrix, Matrix.CreateTranslation(shift));
         }
 
     }

@@ -150,7 +150,7 @@ namespace Asteroids
                 if (spaceDown == false)
                 {
                     spaceDown = true;
-                    missiles.Add(new Missile(Content, ship, new ParticleSystem(spriteManager)));
+                    missiles.Add(new Missile(Content, ship, particleSystem));
                 }
             }
             else

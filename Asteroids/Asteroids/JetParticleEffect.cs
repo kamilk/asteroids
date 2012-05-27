@@ -18,15 +18,8 @@ namespace Asteroids
             this.ship = ship;
         }
 
-        protected override void SpawnInitialParticles(GameTime time)
+        protected override void OnBeforeFirstUpdate(GameTime time)
         {
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    var particle = CreateParticle("sprite", time);
-            //    particle.Size = 0.1f;
-            //    particle.Position.X = (float)random.Next(1000) / 1000.0f;
-            //    particle.Position.Y = 10.0f;
-            //}
             nextSpawnTime = time.TotalGameTime.TotalMilliseconds + 1000.0f / particlesPerSecond;
         }
 

@@ -23,7 +23,7 @@ namespace Asteroids
         {
             if (!initialized)
             {
-                SpawnInitialParticles(time);
+                OnBeforeFirstUpdate(time);
                 initialized = true;
             }
 
@@ -43,7 +43,7 @@ namespace Asteroids
             }
         }
 
-        protected abstract void SpawnInitialParticles(GameTime time);
+        protected abstract void OnBeforeFirstUpdate(GameTime time);
 
         protected abstract bool UpdateParticle(Particle particle, GameTime time);
 

@@ -67,7 +67,7 @@ namespace Asteroids
 
         public void Update(GameTime time)
         {
-            float moveSpeed = 0.05f;
+            float moveSpeed = 0.01f;
             rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.002f) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), 0.005f) * Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.003f);
 
             asteroidPosition += moveSpeed * moveVector;

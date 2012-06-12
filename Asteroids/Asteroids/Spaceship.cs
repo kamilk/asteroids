@@ -18,6 +18,13 @@ namespace Asteroids
             get { return model; }
             set { model = value; }
         }
+        private int _lifes = 3;
+
+        public int lifes
+        {
+            get { return _lifes; }
+        }
+
         Matrix[] transforms;
         Quaternion spacecraftRotation;
         Matrix worldMatrix;
@@ -32,7 +39,6 @@ namespace Asteroids
             get { return velocity; }
             set { velocity = value; }
         }
-
 
         public Matrix WorldMatrix
         {
@@ -131,6 +137,16 @@ namespace Asteroids
             float moveSpeed = 0.05f;
             Vector3 rotatedVector = Vector3.Transform(vectorToAdd, SpacecraftRotation);
             SpacecraftPosition += moveSpeed * rotatedVector;
+        }
+
+        public bool Collide_DoesEnd()
+        {
+            --_lifes;
+
+            if (_lifes <= 0)
+                return true;
+
+            return false;
         }
     }
 }

@@ -27,15 +27,17 @@ namespace Asteroids
         SpaceshipCamera camera;
 
         Spaceship ship;
-        Asteroid[] asteroids = new Asteroid[NUM_PLANETS];
-        Sphere[] stars = new Sphere[NUM_STARS];
+        Asteroid[] asteroids = new Asteroid[NUM_ASTEROIDS];
         IList<Missile> missiles = new List<Missile>();
 
         CoordCross coordCross;
         BasicEffect basicEffect;
 
-        const int NUM_PLANETS = 3;
-        const int NUM_STARS = 2;
+        const int NUM_ASTEROIDS = 20;
+
+        bool collided_object_ship = false;
+        bool has_just_collided = false;
+        int points = 0;
 
         private Sprite sprite1;
         private Sprite sprite2;
@@ -87,21 +89,22 @@ namespace Asteroids
             skyboxModel = Content.Load<Model>("skybox");
             skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
 
-            // Create a new SpriteBatch, which can be used to draw textures.
+            int x, y, z, pos_x, pos_y, pos_z;
+            Random random = new Random();
 
-            asteroids[0] = new Asteroid(Content, ship, new Vector3(0, 0, 1));
-            asteroids[1] = new Asteroid(Content, ship, new Vector3(0, 1, 1));
-            asteroids[2] = new Asteroid(Content, ship, new Vector3(1, 1, 1));
+            for(int i = 0; i < NUM_ASTEROIDS; ++i)
+            {
+                x = random.Next(2);
+                z = random.Next(2);
+                y = random.Next(2);
 
-            asteroids[0].Position = new Vector3(0, 0, -10);
-            asteroids[1].Position = new Vector3(-10, 30, -20);
-            asteroids[2].Position = new Vector3(30, -40, 35);
+                pos_x = random.Next(-30, 31);
+                pos_y = random.Next(-30, 31);
+                pos_z = random.Next(-30, 31);
 
-            stars[0] = new Sphere(Content);
-            stars[1] = new Sphere(Content);
-
-            stars[0].SpherePosition = new Vector3(0, 0, 0);
-            stars[1].SpherePosition = new Vector3(40, 20, -20);
+                asteroids[i] = new Asteroid(Content, ship, new Vector3(x, y, z));
+                asteroids[i].Position = new Vector3(pos_x, pos_y, pos_z);
+            }
 
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteManager = new SpriteManager(device, Content);
@@ -171,9 +174,16 @@ namespace Asteroids
 
             ship.Update(Mouse.GetState(), keyboardState, gamePadState);
             camera.Update();
-            asteroids[0].Update(gameTime);
-            asteroids[1].Update(gameTime);
-            asteroids[2].Update(gameTime);
+
+            for (int i = 0; i < NUM_ASTEROIDS; ++i)
+            {
+                if (asteroids[i] == null)
+                    continue;
+
+                asteroids[i].Update(gameTime);
+            }
+
+
             foreach(Missile missile in missiles)
             {
                 missile.Update(gameTime);
@@ -240,39 +250,76 @@ namespace Asteroids
             Matrix world1 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(-10, 0, 0);
             Matrix world2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(1000, 0, 0);
 
-            bool anyColision = false;
+            collided_object_ship = false;
 
-            for (int i = 0; i < NUM_PLANETS; ++i)
+            for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
+                if (asteroids[i] == null)
+                    continue;
+
                 asteroids[i].Draw(camera);
                 if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, ship.Model, ship.WorldMatrix))
-                    anyColision = true;
+                {
+                    collided_object_ship = true;
+                    asteroids[i] = null;
+                }
             }
 
-            for (int i = 0; i < NUM_STARS; ++i)
+            if (collided_object_ship)
             {
-                stars[i].Draw(camera);
-                if (XNAUtils.ModelsCollide(stars[i].Model, stars[i].WorldMatrix, ship.Model, ship.WorldMatrix))
-                    anyColision = true;
+                if (!has_just_collided)
+
+                    if (ship.Collide_DoesEnd())
+                        Exit();     //TODO: some end game text, option to try again etc. (possibly)
+
+                has_just_collided = true;
+                points -= 20;
             }
-            foreach(Missile missile in missiles)
+            else
+            {
+                has_just_collided = false;
+            }
+
+            int index = -1;
+
+            foreach (Missile missile in missiles)
             {
                 missile.Draw(camera);
+
+                // Check for collisions rocket - asteroid
+                for (int i = 0; i < NUM_ASTEROIDS; ++i)
+                {
+                    if (asteroids[i] == null)
+                        continue;
+
+                    if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, missile.Model, missile.WorldMatrix))
+                    {
+                        asteroids[i] = null;
+
+                        // Store only the first one to collide, rest actually won't because asteroid no longer exists
+                        // TODO: Some kind of explosion
+                        if( index < 0 )
+                            index = missiles.IndexOf(missile);
+                        
+                        points += 10;
+                    }
+                }
             }
 
-            if (anyColision)
-                Window.Title = "Asteroids - Kolizja";
-            else
-                Window.Title = "Asteroids";
+            // Has to be done after the loop
+            if( index >= 0 )
+                missiles.RemoveAt(index);
 
             spriteManager.DrawAll(spriteDrawer, camera);
 
-            spBatch.Begin();
-            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f}", ship.SpacecraftPosition.X,
-                ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z), new Vector2(10.0f, 10.0f), Color.White);
+            spBatch.Begin();    //TODO: remove lifes from text renderer and place 2d images representing lifes.
+            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lifes: {3:f} | Points: {4:f}", ship.SpacecraftPosition.X,
+                ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z, ship.lifes, points), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
 
-            testMissile.Draw(camera);
+            // TODO: remove test missile completely, probably test sprite in 0,0,0 too
+            // no i uklad wspolrzednych tez
+            //testMissile.Draw(camera);
 
             base.Draw(gameTime);
         }

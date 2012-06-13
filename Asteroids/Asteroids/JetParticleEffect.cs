@@ -40,7 +40,7 @@ namespace Asteroids
                 velocity.Normalize();
                 velocity *= 0.5f;
 
-                var particle = CreateParticle("sprite", time);
+                var particle = CreateParticle(ResourceNames.ParticleTexture, time);
                 particle.Position.UnderlyingVector = position;
                 particle.Velocity = velocity;
                 particle.Size = 0.05f;

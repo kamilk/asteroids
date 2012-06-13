@@ -52,7 +52,7 @@ namespace Asteroids
 
         public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position, ParticleSystem system)
         {
-            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "missile", content);
+            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, ResourceNames.Missile, content);
 
             moveVector.Normalize();
             Vector2 ZX = new Vector2(moveVector.Z, moveVector.X);

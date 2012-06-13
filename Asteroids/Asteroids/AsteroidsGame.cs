@@ -86,7 +86,7 @@ namespace Asteroids
             ship = new Spaceship(Content);
             camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
 
-            skyboxModel = Content.Load<Model>("skybox");
+            skyboxModel = Content.Load<Model>(ResourceNames.SkyboxModel);
             skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
 
             int x, y, z, pos_x, pos_y, pos_z;
@@ -109,16 +109,16 @@ namespace Asteroids
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteManager = new SpriteManager(device, Content);
 
-            sprite1 = spriteManager.CreateSprite("sprite");
+            sprite1 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
             sprite1.Position.UnderlyingVector = Vector3.Zero;
             sprite1.Size = 0.1f;
 
-            sprite2 = spriteManager.CreateSprite("sprite");
+            sprite2 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
             sprite2.Position.UnderlyingVector = new Vector3(3.0f, 4.0f, 1.0f);
             sprite2.Size = 0.5f;
             sprite2.Color = Color.Blue;
 
-            sprite3 = spriteManager.CreateSprite("sprite");
+            sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
             sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
             sprite3.Size = 0.03f;
             sprite3.Color = Color.Green;
@@ -198,7 +198,7 @@ namespace Asteroids
                     spriteManager.DeleteSprite(sprite2);
                     sprite2 = null;
 
-                    sprite3 = spriteManager.CreateSprite("sprite");
+                    sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
                     sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
                     sprite3.Size = 0.05f;
                     sprite3.Color = Color.Green;

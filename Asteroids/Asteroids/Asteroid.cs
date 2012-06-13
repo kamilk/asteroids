@@ -51,7 +51,7 @@ namespace Asteroids
 
         public Asteroid(ContentManager content, Vector3 moveVector, float scale = 1.0f)
         {
-            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "LargeAsteroid", content);
+            model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, ResourceNames.Asteroid, content);
             asteroidPosition = new Vector3(0, 0, 0);
             rotation = Quaternion.Identity;
             this.scale = scale;

@@ -49,9 +49,9 @@ namespace Asteroids
 
         protected abstract void UpdateSystem(GameTime time);
 
-        protected Particle CreateParticle(string textureName, GameTime time)
+        protected Particle CreateParticle(string textureName, string maskName, GameTime time)
         {
-            var particle = ParticleSystem.CreateParticle(textureName);
+            var particle = ParticleSystem.CreateParticle(textureName, maskName);
             particles.Add(particle);
             particle.SpawnTime = time.TotalGameTime;
             return particle;

@@ -69,6 +69,11 @@ namespace Asteroids
             effect.Parameters["Texture"].SetValue(texture);
         }
 
+        public void SetMaskTexture(Texture2D texture)
+        {
+            effect.Parameters["MaskTexture"].SetValue(texture);
+        }
+
         public void End()
         {
             EndWithoutResettingFlag();

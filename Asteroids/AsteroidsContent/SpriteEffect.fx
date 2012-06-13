@@ -4,10 +4,23 @@ float4x4 Projection;
 float2 ViewportScale;
 
 texture Texture;
+texture MaskTexture;
 
 sampler Sampler = sampler_state
 {
     Texture = (Texture);
+    
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = Point;
+    
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+sampler MaskSampler = sampler_state
+{
+    Texture = (MaskTexture);
     
     MinFilter = Linear;
     MagFilter = Linear;
@@ -54,7 +67,12 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-	return tex2D(Sampler, input.TexCoord) * input.Color;
+	float4 result = tex2D(Sampler, input.TexCoord) * input.Color;
+	float4 mask = tex2D(MaskSampler, input.TexCoord);
+	float alpha = mask.r;
+	result.rgb *= alpha;
+	result.a = alpha;
+	return result;
 }
 
 technique Technique1
@@ -63,5 +81,9 @@ technique Technique1
     {
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 PixelShaderFunction();
-    }
+
+		AlphaBlendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+	}
 }

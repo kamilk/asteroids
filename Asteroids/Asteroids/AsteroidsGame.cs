@@ -109,16 +109,16 @@ namespace Asteroids
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteManager = new SpriteManager(device, Content);
 
-            sprite1 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
+            sprite1 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
             sprite1.Position.UnderlyingVector = Vector3.Zero;
             sprite1.Size = 0.1f;
 
-            sprite2 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
+            sprite2 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
             sprite2.Position.UnderlyingVector = new Vector3(3.0f, 4.0f, 1.0f);
             sprite2.Size = 0.5f;
             sprite2.Color = Color.Blue;
 
-            sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
+            sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
             sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
             sprite3.Size = 0.03f;
             sprite3.Color = Color.Green;
@@ -198,7 +198,7 @@ namespace Asteroids
                     spriteManager.DeleteSprite(sprite2);
                     sprite2 = null;
 
-                    sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture);
+                    sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
                     sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
                     sprite3.Size = 0.05f;
                     sprite3.Color = Color.Green;
@@ -321,9 +321,9 @@ namespace Asteroids
 
             spriteManager.DrawAll(spriteDrawer, camera);
 
-            spBatch.Begin();    //TODO: remove lifes from text renderer and place 2d images representing lifes.
-            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lifes: {3:f} | Points: {4:f}", ship.SpacecraftPosition.X,
-                ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z, ship.lifes, points), new Vector2(10.0f, 10.0f), Color.White);
+            spBatch.Begin();    //TODO: remove lives from text renderer and place 2d images representing lifes.
+            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3:f} | Points: {4:f}", ship.SpacecraftPosition.X,
+                ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z, ship.Lives, points), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
 
             // TODO: remove test missile completely, probably test sprite in 0,0,0 too

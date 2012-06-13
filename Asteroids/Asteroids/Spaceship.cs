@@ -18,11 +18,11 @@ namespace Asteroids
             get { return model; }
             set { model = value; }
         }
-        private int _lifes = 3;
+        private int _lives = 3;
 
-        public int lifes
+        public int Lives
         {
-            get { return _lifes; }
+            get { return _lives; }
         }
 
         Matrix[] transforms;
@@ -141,9 +141,9 @@ namespace Asteroids
 
         public bool Collide_DoesEnd()
         {
-            --_lifes;
+            --_lives;
 
-            if (_lifes <= 0)
+            if (_lives <= 0)
                 return true;
 
             return false;

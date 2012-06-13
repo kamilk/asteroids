@@ -11,9 +11,9 @@ namespace Asteroids
             this.spriteManager = spriteManager;
         }
 
-        public Particle CreateParticle(string textureName)
+        public Particle CreateParticle(string textureName, string maskName)
         {
-            Sprite sprite = spriteManager.CreateSprite(textureName);
+            Sprite sprite = spriteManager.CreateSprite(textureName, maskName);
             return new Particle(sprite);
         }
 

@@ -219,6 +219,63 @@ namespace Asteroids
 
             jetParticleEffect.Update(gameTime);
 
+            collided_object_ship = false;
+
+            for (int i = 0; i < NUM_ASTEROIDS; ++i)
+            {
+                if (asteroids[i] == null)
+                    continue;
+
+                if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, ship.Model, ship.WorldMatrix))
+                {
+                    collided_object_ship = true;
+                    asteroids[i] = null;
+                }
+            }
+
+            if (collided_object_ship)
+            {
+                if (!has_just_collided)
+
+                    if (ship.Collide_DoesEnd())
+                        Exit();     //TODO: some end game text, option to try again etc. (possibly)
+
+                has_just_collided = true;
+                points -= 20;
+            }
+            else
+            {
+                has_just_collided = false;
+            }
+
+            int index = -1;
+
+            foreach (Missile missile in missiles)
+            {
+                // Check for collisions rocket - asteroid
+                for (int i = 0; i < NUM_ASTEROIDS; ++i)
+                {
+                    if (asteroids[i] == null)
+                        continue;
+
+                    if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, missile.Model, missile.WorldMatrix))
+                    {
+                        asteroids[i] = null;
+
+                        // Store only the first one to collide, rest actually won't because asteroid no longer exists
+                        // TODO: Some kind of explosion
+                        if (index < 0)
+                            index = missiles.IndexOf(missile);
+
+                        points += 10;
+                    }
+                }
+            }
+
+            // Has to be done after the loop
+            if (index >= 0)
+                missiles.RemoveAt(index);
+
             base.Update(gameTime);
         }
 
@@ -250,65 +307,18 @@ namespace Asteroids
             Matrix world1 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(-10, 0, 0);
             Matrix world2 = Matrix.CreateScale(0.01f) * Matrix.CreateRotationY(MathHelper.PiOver2) * Matrix.CreateTranslation(1000, 0, 0);
 
-            collided_object_ship = false;
-
             for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
                 if (asteroids[i] == null)
                     continue;
 
                 asteroids[i].Draw(camera);
-                if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, ship.Model, ship.WorldMatrix))
-                {
-                    collided_object_ship = true;
-                    asteroids[i] = null;
-                }
             }
-
-            if (collided_object_ship)
-            {
-                if (!has_just_collided)
-
-                    if (ship.Collide_DoesEnd())
-                        Exit();     //TODO: some end game text, option to try again etc. (possibly)
-
-                has_just_collided = true;
-                points -= 20;
-            }
-            else
-            {
-                has_just_collided = false;
-            }
-
-            int index = -1;
 
             foreach (Missile missile in missiles)
             {
                 missile.Draw(camera);
-
-                // Check for collisions rocket - asteroid
-                for (int i = 0; i < NUM_ASTEROIDS; ++i)
-                {
-                    if (asteroids[i] == null)
-                        continue;
-
-                    if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, missile.Model, missile.WorldMatrix))
-                    {
-                        asteroids[i] = null;
-
-                        // Store only the first one to collide, rest actually won't because asteroid no longer exists
-                        // TODO: Some kind of explosion
-                        if( index < 0 )
-                            index = missiles.IndexOf(missile);
-                        
-                        points += 10;
-                    }
-                }
             }
-
-            // Has to be done after the loop
-            if( index >= 0 )
-                missiles.RemoveAt(index);
 
             spriteManager.DrawAll(spriteDrawer, camera);
 

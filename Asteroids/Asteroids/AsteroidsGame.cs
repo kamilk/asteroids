@@ -28,7 +28,7 @@ namespace Asteroids
 
         Spaceship ship;
         Asteroid[] asteroids = new Asteroid[NUM_ASTEROIDS];
-        IList<Missile> missiles = new List<Missile>();
+        List<Missile> missiles = new List<Missile>();
 
         CoordCross coordCross;
         BasicEffect basicEffect;
@@ -92,7 +92,7 @@ namespace Asteroids
             int x, y, z, pos_x, pos_y, pos_z;
             Random random = new Random();
 
-            for(int i = 0; i < NUM_ASTEROIDS; ++i)
+            for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
                 x = random.Next(2);
                 z = random.Next(2);
@@ -108,7 +108,7 @@ namespace Asteroids
 
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteManager = new SpriteManager(device, Content);
-            
+
             sprite1 = spriteManager.CreateSprite("sprite");
             sprite1.Position.UnderlyingVector = Vector3.Zero;
             sprite1.Size = 0.1f;
@@ -184,7 +184,7 @@ namespace Asteroids
             }
 
 
-            foreach(Missile missile in missiles)
+            foreach (Missile missile in missiles)
             {
                 missile.Update(gameTime, ship.SpacecraftPosition);
             }
@@ -248,33 +248,32 @@ namespace Asteroids
                 has_just_collided = false;
             }
 
-            int index = -1;
-
-            foreach (Missile missile in missiles)
+            // Check for collisions rocket - asteroid
+            for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
-                // Check for collisions rocket - asteroid
-                for (int i = 0; i < NUM_ASTEROIDS; ++i)
-                {
-                    if (asteroids[i] == null)
-                        continue;
+                Asteroid asteroid = asteroids[i];
+                if (asteroid == null)
+                    continue;
 
-                    if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, missile.Model, missile.WorldMatrix))
+                Missile missileToRemove = null;
+
+                foreach (Missile missile in missiles)
+                {
+                    if (XNAUtils.ModelsCollide(asteroid.Model, asteroid.WorldMatrix, missile.Model, missile.WorldMatrix))
                     {
                         asteroids[i] = null;
 
                         // Store only the first one to collide, rest actually won't because asteroid no longer exists
                         // TODO: Some kind of explosion
-                        if (index < 0)
-                            index = missiles.IndexOf(missile);
-
+                        missileToRemove = missile;
                         points += 10;
+                        break;
                     }
                 }
-            }
 
-            // Has to be done after the loop
-            if (index >= 0)
-                missiles.RemoveAt(index);
+                if (missileToRemove != null)
+                    missiles.Remove(missileToRemove);
+            }
 
             base.Update(gameTime);
         }

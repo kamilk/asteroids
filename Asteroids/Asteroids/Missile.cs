@@ -16,7 +16,6 @@ namespace Asteroids
         private Matrix worldMatrix;
         private Vector3 position;
         private float scale;
-        private Spaceship ship;
         private Vector3 moveVector;
         private MissileJetParticleEffect missileJetParticleEffect;
 
@@ -45,11 +44,6 @@ namespace Asteroids
             get { return scale; }
             set { scale = value; }
         }
-        public Spaceship Ship
-        {
-            get { return ship; }
-            set { ship = value; }
-        }
         public Vector3 Position
         {
             get { return position; }
@@ -70,7 +64,6 @@ namespace Asteroids
             rotation *= Quaternion.CreateFromAxisAngle(Vector3.Up, horizontalAngle + MathHelper.PiOver2);
             float verticalAngle = (float)Math.Asin(moveVector.Y / moveVector.Length());
             rotation *= Quaternion.CreateFromAxisAngle(Vector3.Forward, verticalAngle);
-            this.ship = ship;
             this.scale = 0.1f;
             this.moveVector = moveVector;
             this.position = position;
@@ -83,13 +76,13 @@ namespace Asteroids
         {
         }
 
-        public void Update(GameTime time)
+        public void Update(GameTime time, Vector3 centerOfUniverse)
         {
             float moveSpeed = 0.3f;
             rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.01f);
 
             position += moveSpeed * moveVector;
-            position = ModelUtils.BendSpace(this);
+            position = ModelUtils.BendSpace(this, centerOfUniverse);
             missileJetParticleEffect.Update(time);
         }
 

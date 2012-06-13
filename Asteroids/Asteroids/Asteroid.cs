@@ -16,7 +16,6 @@ namespace Asteroids
         private Matrix worldMatrix;
         private Vector3 asteroidPosition;
         private float scale;
-        private Spaceship ship;
         private Vector3 moveVector;
 
         public Model Model
@@ -44,34 +43,28 @@ namespace Asteroids
             get { return scale; }
             set { scale = value; }
         }
-        public Spaceship Ship
-        {
-            get { return ship; }
-            set { ship = value; }
-        }
         public Vector3 Position
         {
             get { return asteroidPosition; }
             set { asteroidPosition = value; }
         }
 
-        public Asteroid(ContentManager content, Spaceship ship, Vector3 moveVector, float scale = 1.0f)
+        public Asteroid(ContentManager content, Vector3 moveVector, float scale = 1.0f)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, "LargeAsteroid", content);
             asteroidPosition = new Vector3(0, 0, 0);
             rotation = Quaternion.Identity;
-            this.ship = ship;
             this.scale = scale;
             this.moveVector = moveVector;
         }
 
-        public void Update(GameTime time)
+        public void Update(GameTime time, Vector3 centerOfUniverse)
         {
             float moveSpeed = 0.01f;
             rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.002f) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), 0.005f) * Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.003f);
 
             asteroidPosition += moveSpeed * moveVector;
-            asteroidPosition = ModelUtils.BendSpace(this);
+            asteroidPosition = ModelUtils.BendSpace(this, centerOfUniverse);
         }
 
         public void Draw(ICamera fpsCam)

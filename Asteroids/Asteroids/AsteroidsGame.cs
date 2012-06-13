@@ -102,7 +102,7 @@ namespace Asteroids
                 pos_y = random.Next(-30, 31);
                 pos_z = random.Next(-30, 31);
 
-                asteroids[i] = new Asteroid(Content, ship, new Vector3(x, y, z));
+                asteroids[i] = new Asteroid(Content, new Vector3(x, y, z));
                 asteroids[i].Position = new Vector3(pos_x, pos_y, pos_z);
             }
 
@@ -180,13 +180,13 @@ namespace Asteroids
                 if (asteroids[i] == null)
                     continue;
 
-                asteroids[i].Update(gameTime);
+                asteroids[i].Update(gameTime, ship.SpacecraftPosition);
             }
 
 
             foreach(Missile missile in missiles)
             {
-                missile.Update(gameTime);
+                missile.Update(gameTime, ship.SpacecraftPosition);
             }
 
             if (sprite2 != null)

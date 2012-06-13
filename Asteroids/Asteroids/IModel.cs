@@ -40,12 +40,7 @@ namespace Asteroids
             get;
         }
 
-        Spaceship Ship
-        {
-            get;
-        }
-
-        void Update(GameTime time);
+        void Update(GameTime time, Vector3 centerOfUniverse);
         void Draw(ICamera fpsCam);
 
     }

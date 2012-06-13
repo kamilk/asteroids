@@ -29,17 +29,17 @@ namespace Asteroids
             }
         }
 
-        public static Vector3 BendSpace(IModel model)
+        public static Vector3 BendSpace(IModel model, Vector3 centerOfUniverse)
         {
             float maxDistance = 70;
             Vector3 newPosition = model.Position;
 
             foreach (Vector3 direction in new Vector3[] { new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1) })
             {
-                Vector3 asteroidToShip = model.Position - model.Ship.SpacecraftPosition;
+                Vector3 asteroidToShip = model.Position - centerOfUniverse;
                 if ((asteroidToShip * direction).Length() > maxDistance)
                 {
-                    Vector3 reverseDirection = model.Ship.SpacecraftPosition - ((asteroidToShip * direction).Length() * Vector3.One / asteroidToShip) * maxDistance;
+                    Vector3 reverseDirection = centerOfUniverse - ((asteroidToShip * direction).Length() * Vector3.One / asteroidToShip) * maxDistance;
                     newPosition = reverseDirection * direction + model.Position * (Vector3.One - direction);
                 }
             }

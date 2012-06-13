@@ -7,8 +7,8 @@ namespace Asteroids
 {
     public class SpriteManager
     {
-        private Dictionary<string, BatchOfSprites> batchesByTexture = new Dictionary<string,BatchOfSprites>();
-        private Dictionary<Sprite, BatchOfSprites> batchesBySprite = new Dictionary<Sprite, BatchOfSprites>();
+        private Dictionary<string, AutoResizableSpriteGroup> spriteGroupsByTexture = new Dictionary<string, AutoResizableSpriteGroup>();
+        private Dictionary<Sprite, AutoResizableSpriteGroup> spriteGroupsBySprite = new Dictionary<Sprite, AutoResizableSpriteGroup>();
         private ContentManager content;
         private GraphicsDevice device;
 
@@ -21,38 +21,38 @@ namespace Asteroids
         public Sprite CreateSprite(string textureName)
         {
             var sprite = new Sprite();
-            BatchOfSprites batch;
-            if (!batchesByTexture.TryGetValue(textureName, out batch))
+            AutoResizableSpriteGroup spriteGroup;
+            if (!spriteGroupsByTexture.TryGetValue(textureName, out spriteGroup))
             {
-                batch = new BatchOfSprites(device);
-                batchesByTexture.Add(textureName, batch);
+                spriteGroup = new AutoResizableSpriteGroup(device);
+                spriteGroupsByTexture.Add(textureName, spriteGroup);
             }
-            batch.AddSprite(sprite);
-            batchesBySprite.Add(sprite, batch);
+            spriteGroup.AddSprite(sprite);
+            spriteGroupsBySprite.Add(sprite, spriteGroup);
             return sprite;
         }
 
         public void DeleteSprite(Sprite sprite)
         {
-            BatchOfSprites batch;
-            if (batchesBySprite.TryGetValue(sprite, out batch))
+            AutoResizableSpriteGroup spriteGroup;
+            if (spriteGroupsBySprite.TryGetValue(sprite, out spriteGroup))
             {
-                batch.RemoveSprite(sprite);
-                batchesBySprite.Remove(sprite);
+                spriteGroup.RemoveSprite(sprite);
+                spriteGroupsBySprite.Remove(sprite);
             }
         }
 
         public void DrawAll(SpriteDrawer spriteDrawer, ICamera camera)
         {
             spriteDrawer.Begin(camera);
-            foreach (var textureNameBatchPair in batchesByTexture)
+            foreach (var textureNameSpriteGroupPair in spriteGroupsByTexture)
             {
-                string textureName = textureNameBatchPair.Key;
-                BatchOfSprites batch = textureNameBatchPair.Value;
+                string textureName = textureNameSpriteGroupPair.Key;
+                AutoResizableSpriteGroup spriteGroup = textureNameSpriteGroupPair.Value;
                 var texture = content.Load<Texture2D>(textureName);
 
                 spriteDrawer.SetTexture(texture);
-                spriteDrawer.DrawBatchOfSprites(batch);
+                spriteDrawer.DrawBatchOfSprites(spriteGroup);
             }
             spriteDrawer.End();
         }

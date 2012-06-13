@@ -8,7 +8,7 @@ namespace Asteroids
 {
     public class BatchOfSprites
     {
-        public const int MaxSprites = 1000;
+        public const int MaxSprites = 100;
 
         private GraphicsDevice device;
         private Dictionary<Sprite, int> spriteIndices = new Dictionary<Sprite, int>();
@@ -17,6 +17,16 @@ namespace Asteroids
         private int firstFreeSprite;
         private VertexBuffer vertexBuffer;
         private bool isVertexBufferUpToDate = false;
+
+        public bool IsFull
+        {
+            get { return firstActiveSprite == 0 && firstFreeSprite >= MaxSprites - 1; }
+        }
+
+        public bool IsEmpty
+        {
+            get { return firstActiveSprite < 0; }
+        }
 
         public BatchOfSprites(GraphicsDevice device)
         {
@@ -34,7 +44,7 @@ namespace Asteroids
             {
                 index = --firstActiveSprite;
             }
-            else if (firstFreeSprite < MaxSprites - 1)
+            else if (firstFreeSprite < MaxSprites)
             {
                 index = firstFreeSprite++;
                 AddSpriteAtIndex(index, sprite);

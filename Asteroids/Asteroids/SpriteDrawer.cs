@@ -94,16 +94,14 @@ namespace Asteroids
             }
         }
 
-        public void DrawBatchOfSprites(BatchOfSprites batch)
+        public void DrawBatchOfSprites(AutoResizableSpriteGroup spriteGroup)
         {
-            device.SetVertexBuffer(batch.GetVertexBuffer());
-
             effect.Parameters["World"].SetValue(Matrix.Identity);
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                batch.DrawAll();
+                spriteGroup.DrawAll();
             }
         }
     }

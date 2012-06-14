@@ -5,7 +5,7 @@ namespace Asteroids
 {
     class JetParticleEffect : ParticleEffect
     {
-        private const double particlesPerSecond = 30.0;
+        private const double particlesPerSecond = 50.0;
         private const double particleLifetime = 2000.0;
 
         private Random random = new Random();
@@ -35,7 +35,7 @@ namespace Asteroids
             {
                 nextSpawnTime += 1000.0f / particlesPerSecond;
 
-                Vector3 jetDirection = new Vector3(Random(-0.1f, 0.1f), Random(-0.1f, 0.1f), Random(0.6f, 0.8f));
+                Vector3 jetDirection = new Vector3(Random(-0.2f, 0.2f), Random(-0.2f, 0.2f), Random(0.6f, 0.8f));
                 Vector3 velocity = Vector3.Transform(jetDirection, jetMatrix) - position;
                 velocity.Normalize();
                 velocity *= 0.5f;

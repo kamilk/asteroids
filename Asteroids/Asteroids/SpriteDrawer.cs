@@ -60,6 +60,7 @@ namespace Asteroids
 
             oldRasterizerState = device.RasterizerState;
             device.RasterizerState = rasterizerState;
+            device.DepthStencilState = DepthStencilState.DepthRead;
 
             device.Indices = indexBuffer;
         }
@@ -83,6 +84,7 @@ namespace Asteroids
         private void EndWithoutResettingFlag()
         {
             device.RasterizerState = oldRasterizerState;
+            device.DepthStencilState = DepthStencilState.Default;
         }
 
         public void DrawSprite(ICamera camera, Vector3 position, float size, Color color)

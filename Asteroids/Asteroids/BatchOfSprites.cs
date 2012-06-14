@@ -78,6 +78,13 @@ namespace Asteroids
                 firstFreeSprite--;
             else
                 RebuildVertexArray();
+
+            //We've emptied the batch completely
+            if (firstActiveSprite == firstFreeSprite)
+            {
+                firstActiveSprite = -1;
+                firstFreeSprite = 0;
+            }
         }
 
         private void RebuildVertexArray()

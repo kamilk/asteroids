@@ -41,17 +41,11 @@ namespace Asteroids
         bool has_just_collided = false;
         int points = 0;
 
-        private Sprite sprite1;
-        private Sprite sprite2;
-        private Sprite sprite3;
-
         SpriteFont spFont;
         SpriteBatch spBatch;
 
         ParticleSystem particleSystem;
         JetParticleEffect jetParticleEffect;
-
-        Missile testMissile;
 
         public AsteroidsGame()
         {
@@ -111,29 +105,11 @@ namespace Asteroids
             spriteDrawer = new SpriteDrawer(device, Content);
             spriteManager = new SpriteManager(device, Content);
 
-            sprite1 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
-            sprite1.Position.UnderlyingVector = Vector3.Zero;
-            sprite1.Size = 0.1f;
-
-            sprite2 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
-            sprite2.Position.UnderlyingVector = new Vector3(3.0f, 4.0f, 1.0f);
-            sprite2.Size = 0.5f;
-            sprite2.Color = Color.Blue;
-
-            sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
-            sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
-            sprite3.Size = 0.03f;
-            sprite3.Color = Color.Green;
-
-            spriteManager.DeleteSprite(sprite3);
-
             spFont = Content.Load<SpriteFont>(@"Arial");
             spBatch = new SpriteBatch(graphics.GraphicsDevice);
 
             particleSystem = new ParticleSystem(spriteManager);
             jetParticleEffect = new JetParticleEffect(particleSystem, ship);
-
-            testMissile = new Missile(Content, ship);
         }
 
         /// <summary>
@@ -188,34 +164,6 @@ namespace Asteroids
             foreach (Missile missile in missiles)
             {
                 missile.Update(gameTime, ship.SpacecraftPosition);
-            }
-
-            if (sprite2 != null)
-            {
-                float displacement = 3.0f * (float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f;
-                sprite2.Position.X += displacement;
-                if (sprite2.Position.X > 20.0f)
-                {
-                    spriteManager.DeleteSprite(sprite2);
-                    sprite2 = null;
-
-                    sprite3 = spriteManager.CreateSprite(ResourceNames.ParticleTexture, ResourceNames.ParticleMask);
-                    sprite3.Position.UnderlyingVector = new Vector3(-3.0f, 1.0f, 1.0f);
-                    sprite3.Size = 0.05f;
-                    sprite3.Color = Color.Green;
-                }
-            }
-
-            testMissile.Position = new Vector3(0.0f, 1.0f, 1.0f);
-
-            if (sprite1 != null && testMissile != null)
-            {
-                sprite1.Position.UnderlyingVector = Vector3.Transform(Vector3.Zero, testMissile.GetJetOrientationMatrix());
-            }
-
-            if (sprite3 != null)
-            {
-                sprite3.Position.UnderlyingVector = Vector3.Transform(Vector3.Zero, ship.GetJetOrientationMatrix());
             }
 
             jetParticleEffect.Update(gameTime);

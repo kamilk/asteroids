@@ -60,7 +60,7 @@ namespace Asteroids
                 var particle = CreateParticle(ResourceNames.ParticleTexture, ResourceNames.ParticleMask, time);
                 particle.Position.UnderlyingVector = position;
                 particle.Velocity = velocity;
-                particle.Size = 0.05f;
+                particle.Size = 0.5f;
             } while (ShouldNewParticleSpawn(time));
         }
 

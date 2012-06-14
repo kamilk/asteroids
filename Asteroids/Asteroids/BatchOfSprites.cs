@@ -20,7 +20,7 @@ namespace Asteroids
 
         public bool IsFull
         {
-            get { return firstActiveSprite == 0 && firstFreeSprite >= MaxSprites - 1; }
+            get { return firstActiveSprite == 0 && firstFreeSprite > MaxSprites - 1; }
         }
 
         public bool IsEmpty

@@ -14,6 +14,11 @@ namespace Asteroids
             private set;
         }
 
+        public bool HasAnyParticles
+        {
+            get { return particles.Count > 0; }
+        }
+
         public ParticleEffect(ParticleSystem system)
         {
             this.ParticleSystem = system;

@@ -29,6 +29,8 @@ namespace Asteroids
         Spaceship ship;
         Asteroid[] asteroids = new Asteroid[NUM_ASTEROIDS];
         List<Missile> missiles = new List<Missile>();
+        Dictionary<Missile, MissileJetParticleEffect> missileEffectsByMissile = new Dictionary<Missile, MissileJetParticleEffect>();
+        HashSet<MissileJetParticleEffect> missileEffects = new HashSet<MissileJetParticleEffect>();
 
         CoordCross coordCross;
         BasicEffect basicEffect;
@@ -131,7 +133,7 @@ namespace Asteroids
             particleSystem = new ParticleSystem(spriteManager);
             jetParticleEffect = new JetParticleEffect(particleSystem, ship);
 
-            testMissile = new Missile(Content, ship, particleSystem);
+            testMissile = new Missile(Content, ship);
         }
 
         /// <summary>
@@ -157,7 +159,7 @@ namespace Asteroids
                 if (spaceDown == false)
                 {
                     spaceDown = true;
-                    missiles.Add(new Missile(Content, ship, particleSystem));
+                    FireNewMissile();
                 }
             }
             else
@@ -182,7 +184,6 @@ namespace Asteroids
 
                 asteroids[i].Update(gameTime, ship.SpacecraftPosition);
             }
-
 
             foreach (Missile missile in missiles)
             {
@@ -218,6 +219,8 @@ namespace Asteroids
             }
 
             jetParticleEffect.Update(gameTime);
+
+            UpdateMissileEffects(gameTime);
 
             collided_object_ship = false;
 
@@ -272,10 +275,45 @@ namespace Asteroids
                 }
 
                 if (missileToRemove != null)
-                    missiles.Remove(missileToRemove);
+                {
+                    DeleteMissile(missileToRemove);
+                }
             }
 
             base.Update(gameTime);
+        }
+
+        private void UpdateMissileEffects(GameTime gameTime)
+        {
+            var missileEffectsToRemove = new List<MissileJetParticleEffect>();
+            foreach (var effect in missileEffects)
+            {
+                effect.Update(gameTime);
+                if (effect.IsDead)
+                    missileEffectsToRemove.Add(effect);
+            }
+            foreach (var effect in missileEffectsToRemove)
+                missileEffects.Remove(effect);
+        }
+
+        private void FireNewMissile()
+        {
+            Missile missile = new Missile(Content, ship);
+            missiles.Add(missile);
+            var effect = new MissileJetParticleEffect(particleSystem, missile);
+            missileEffects.Add(effect);
+            missileEffectsByMissile.Add(missile, effect);
+        }
+
+        private void DeleteMissile(Missile missile)
+        {
+            missiles.Remove(missile);
+            MissileJetParticleEffect effect;
+            if (missileEffectsByMissile.TryGetValue(missile, out effect))
+            {
+                effect.StopSpawningParticles();
+                missileEffectsByMissile.Remove(missile);
+            }
         }
 
         protected override void Draw(GameTime gameTime)

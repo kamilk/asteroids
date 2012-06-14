@@ -35,7 +35,10 @@ namespace Asteroids
             {
                 nextSpawnTime += 1000.0f / particlesPerSecond;
 
-                Vector3 jetDirection = new Vector3(Random(-0.2f, 0.2f), Random(-0.2f, 0.2f), Random(0.6f, 0.8f));
+                Vector3 jetDirection = new Vector3(
+                    AsteroidsUtilities.Random(-0.2f, 0.2f), 
+                    AsteroidsUtilities.Random(-0.2f, 0.2f), 
+                    AsteroidsUtilities.Random(0.6f, 0.8f));
                 Vector3 velocity = Vector3.Transform(jetDirection, jetMatrix) - position;
                 velocity.Normalize();
                 velocity *= 0.5f;
@@ -60,11 +63,6 @@ namespace Asteroids
         private bool ShouldNewParticleSpawn(GameTime time)
         {
             return nextSpawnTime < time.TotalGameTime.TotalMilliseconds;
-        }
-
-        private float Random(float min, float max)
-        {
-            return min + (max - min) * (float)random.Next(1000000) / 1000000.0f;
         }
     }
 }

@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asteroid.cs" />
+    <Compile Include="AsteroidsUtilities.cs" />
     <Compile Include="TextureAndMaskNames.cs" />
     <Compile Include="ResourceNames.cs" />
     <Compile Include="BatchOfSprites.cs" />

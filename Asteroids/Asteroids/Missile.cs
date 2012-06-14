@@ -17,7 +17,6 @@ namespace Asteroids
         private Vector3 position;
         private float scale;
         private Vector3 moveVector;
-        private MissileJetParticleEffect missileJetParticleEffect;
 
         public Model Model
         {
@@ -50,7 +49,7 @@ namespace Asteroids
             set { position = value; }
         }
 
-        public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position, ParticleSystem system)
+        public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, ResourceNames.Missile, content);
 
@@ -67,12 +66,10 @@ namespace Asteroids
             this.scale = 0.1f;
             this.moveVector = moveVector;
             this.position = position;
-
-            this.missileJetParticleEffect = new MissileJetParticleEffect(system, this);
         }
 
-        public Missile(ContentManager content, Spaceship ship, ParticleSystem system)
-            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition, system)
+        public Missile(ContentManager content, Spaceship ship)
+            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
         {
         }
 
@@ -83,7 +80,6 @@ namespace Asteroids
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this, centerOfUniverse);
-            missileJetParticleEffect.Update(time);
         }
 
         public void Draw(ICamera fpsCam)
@@ -96,6 +92,5 @@ namespace Asteroids
             var shift = new Vector3(0.0f, 0.0f, 0.5f);
             return Matrix.Multiply(WorldMatrix, Matrix.CreateTranslation(shift));
         }
-
     }
 }

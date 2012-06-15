@@ -165,6 +165,10 @@ namespace Asteroids
             {
                 missile.Update(gameTime, ship.SpacecraftPosition);
             }
+            foreach (Missile missile in missiles.Where(m => m.TimeToLive < 0).ToArray())
+            {
+                DeleteMissile(missile);
+            }
 
             jetParticleEffect.Update(gameTime);
 
@@ -237,11 +241,8 @@ namespace Asteroids
             foreach (var effect in missileEffects)
             {
                 effect.Update(gameTime);
-                if (effect.IsDead)
-                    missileEffectsToRemove.Add(effect);
             }
-            foreach (var effect in missileEffectsToRemove)
-                missileEffects.Remove(effect);
+            missileEffects.RemoveWhere(m => m.IsDead);
         }
 
         private void FireNewMissile()

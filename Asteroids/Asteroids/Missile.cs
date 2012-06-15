@@ -71,6 +71,7 @@ namespace Asteroids
         public Missile(ContentManager content, Spaceship ship)
             : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
         {
+            this.TimeToLive = 300;
         }
 
         public void Update(GameTime time, Vector3 centerOfUniverse)
@@ -80,6 +81,7 @@ namespace Asteroids
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this, centerOfUniverse);
+            TimeToLive -= 1;
         }
 
         public void Draw(ICamera fpsCam)
@@ -92,5 +94,7 @@ namespace Asteroids
             var shift = new Vector3(0.0f, 0.0f, 0.5f);
             return Matrix.Multiply(WorldMatrix, Matrix.CreateTranslation(shift));
         }
+
+        public int TimeToLive { get; set; }
     }
 }

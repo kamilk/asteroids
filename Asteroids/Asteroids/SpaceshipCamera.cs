@@ -49,13 +49,13 @@ namespace Asteroids
         public void Update()
         {
             Vector3 cameraOriginalPosition = new Vector3(0.0f, 0.3f, 1.0f);
-            Vector3 cameraRotatedPosition = Vector3.Transform(cameraOriginalPosition, ship.SpacecraftRotation);
-            Vector3 cameraFinalPosition = ship.SpacecraftPosition + cameraRotatedPosition;
+            Vector3 cameraRotatedPosition = Vector3.Transform(cameraOriginalPosition, ship.Rotation);
+            Vector3 cameraFinalPosition = ship.Position + cameraRotatedPosition;
 
             Vector3 cameraOriginalUpVector = new Vector3(0, 1, 0);
-            Vector3 cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, ship.SpacecraftRotation);
+            Vector3 cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, ship.Rotation);
 
-            viewMatrix = Matrix.CreateLookAt(cameraFinalPosition, ship.SpacecraftPosition, cameraRotatedUpVector);
+            viewMatrix = Matrix.CreateLookAt(cameraFinalPosition, ship.Position, cameraRotatedUpVector);
         }
 
         public float UpDownRot

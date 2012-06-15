@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
-    public class Missile : IModel
+    public class Missile : IModel, IJet
     {
         private const int lifeTimeInSeconds = 30;
 
@@ -56,6 +56,10 @@ namespace Asteroids
             get;
             private set;
         }
+        public Vector3 JetPosition
+        {
+            get { return Vector3.Transform(Vector3.Zero, WorldMatrix); }
+        }
 
         public Missile(ContentManager content, Vector3 moveVector, Vector3 position)
         {
@@ -77,7 +81,7 @@ namespace Asteroids
         }
 
         public Missile(ContentManager content, Spaceship ship)
-            : this(content, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
+            : this(content, Vector3.Transform(Vector3.Forward, ship.Rotation), ship.Position)
         { }
 
         public void Update(GameTime time, Vector3 centerOfUniverse)

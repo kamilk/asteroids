@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Asteroids
 {
-    public class Spaceship
+    public class Spaceship : IJet
     {
         Model model;
 
@@ -46,17 +46,26 @@ namespace Asteroids
             set { worldMatrix = value; }
         }
 
-        public Quaternion SpacecraftRotation
+        public Quaternion Rotation
         {
             get { return spacecraftRotation; }
             set { spacecraftRotation = value; }
         }
         Vector3 spacecraftPosition;
 
-        public Vector3 SpacecraftPosition
+        public Vector3 Position
         {
             get { return spacecraftPosition; }
             set { spacecraftPosition = value; }
+        }
+
+        public Vector3 JetPosition
+        {
+            get
+            {
+                var shift = new Vector3(0.0f, 0.0f, 950.0f);
+                return Vector3.Transform(shift, WorldMatrix);
+            }
         }
 
         public Spaceship(ContentManager content)
@@ -121,7 +130,7 @@ namespace Asteroids
                 Velocity = (Velocity <= 0.3) ? 0.2f : Velocity - 0.02f;
 
             Quaternion additionalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), updownRotation) * Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), leftrightRotation);
-            SpacecraftRotation = SpacecraftRotation * additionalRotation;
+            Rotation = Rotation * additionalRotation;
 
             AddToSpacecraftPosition(new Vector3(updownRotation, 0, -Velocity));
         }
@@ -135,8 +144,8 @@ namespace Asteroids
         private void AddToSpacecraftPosition(Vector3 vectorToAdd)
         {
             float moveSpeed = 0.05f;
-            Vector3 rotatedVector = Vector3.Transform(vectorToAdd, SpacecraftRotation);
-            SpacecraftPosition += moveSpeed * rotatedVector;
+            Vector3 rotatedVector = Vector3.Transform(vectorToAdd, Rotation);
+            Position += moveSpeed * rotatedVector;
         }
 
         public bool Collide_DoesEnd()

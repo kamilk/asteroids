@@ -7,19 +7,9 @@ using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
-    public interface IModel
+    public interface IModel : IPositionedObject
     {
         Model Model
-        {
-            get;
-        }
-
-        Quaternion Rotation
-        {
-            get;
-        }
-
-        Vector3 Position
         {
             get;
         }

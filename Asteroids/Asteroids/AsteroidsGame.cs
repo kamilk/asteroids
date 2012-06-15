@@ -29,8 +29,8 @@ namespace Asteroids
         Spaceship ship;
         Asteroid[] asteroids = new Asteroid[NUM_ASTEROIDS];
         List<Missile> missiles = new List<Missile>();
-        Dictionary<Missile, MissileJetParticleEffect> missileEffectsByMissile = new Dictionary<Missile, MissileJetParticleEffect>();
-        HashSet<MissileJetParticleEffect> missileEffects = new HashSet<MissileJetParticleEffect>();
+        Dictionary<Missile, JetParticleEffect> missileEffectsByMissile = new Dictionary<Missile, JetParticleEffect>();
+        HashSet<JetParticleEffect> missileEffects = new HashSet<JetParticleEffect>();
 
         CoordCross coordCross;
         BasicEffect basicEffect;
@@ -110,6 +110,17 @@ namespace Asteroids
 
             particleSystem = new ParticleSystem(spriteManager);
             jetParticleEffect = new JetParticleEffect(particleSystem, ship);
+            jetParticleEffect.MinXDirection = -0.3f;
+            jetParticleEffect.MaxXDirection = 0.3f;
+            jetParticleEffect.MinZDirection = 0.6f;
+            jetParticleEffect.MaxZDirection = 0.8f;
+            jetParticleEffect.MinYDirection = -0.2f;
+            jetParticleEffect.MaxYDirection = 0.2f;
+            jetParticleEffect.ParticlesPerSecond = 50.0;
+            jetParticleEffect.ParticleLifetime = 400.0;
+            jetParticleEffect.ParticleSize = 0.5f;
+            jetParticleEffect.ParticleSpeed = 0.7f;
+            jetParticleEffect.FinalColor = Color.Red;
         }
 
         /// <summary>
@@ -160,12 +171,12 @@ namespace Asteroids
                 if (asteroids[i] == null)
                     continue;
 
-                asteroids[i].Update(gameTime, ship.SpacecraftPosition);
+                asteroids[i].Update(gameTime, ship.Position);
             }
 
             foreach (Missile missile in missiles)
             {
-                missile.Update(gameTime, ship.SpacecraftPosition);
+                missile.Update(gameTime, ship.Position);
             }
             foreach (Missile missile in missiles.Where(m => m.HasDied).ToArray())
             {
@@ -239,7 +250,7 @@ namespace Asteroids
 
         private void UpdateMissileEffects(GameTime gameTime)
         {
-            var missileEffectsToRemove = new List<MissileJetParticleEffect>();
+            var missileEffectsToRemove = new List<JetParticleEffect>();
             foreach (var effect in missileEffects)
             {
                 effect.Update(gameTime);
@@ -251,7 +262,19 @@ namespace Asteroids
         {
             Missile missile = new Missile(Content, ship);
             missiles.Add(missile);
-            var effect = new MissileJetParticleEffect(particleSystem, missile);
+
+            var effect = new JetParticleEffect(particleSystem, missile);
+            effect.MinXDirection = 0.6f;
+            effect.MaxXDirection = 0.8f;
+            effect.MinZDirection = -0.025f;
+            effect.MaxZDirection = 0.025f;
+            effect.MinYDirection = -0.025f;
+            effect.MaxYDirection = 0.025f;
+            effect.ParticlesPerSecond = 30.0;
+            effect.ParticleLifetime = 2000.0;
+            effect.ParticleSize = 0.2f;
+            effect.ParticleSpeed = 5.0f;
+
             missileEffects.Add(effect);
             missileEffectsByMissile.Add(missile, effect);
         }
@@ -259,7 +282,7 @@ namespace Asteroids
         private void DeleteMissile(Missile missile)
         {
             missiles.Remove(missile);
-            MissileJetParticleEffect effect;
+            JetParticleEffect effect;
             if (missileEffectsByMissile.TryGetValue(missile, out effect))
             {
                 effect.StopSpawningParticles();
@@ -282,7 +305,7 @@ namespace Asteroids
 
                     effect.View = camera.ViewMatrix;
                     effect.Projection = camera.ProjectionMatrix;
-                    effect.World = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(ship.SpacecraftPosition); ;
+                    effect.World = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(ship.Position); ;
                 }
                 mesh.Draw();
             }
@@ -311,8 +334,8 @@ namespace Asteroids
             spriteManager.DrawAll(spriteDrawer, camera);
 
             spBatch.Begin();    //TODO: remove lives from text renderer and place 2d images representing lifes.
-            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3:f} | Points: {4:f}", ship.SpacecraftPosition.X,
-                ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z, ship.Lives, points), new Vector2(10.0f, 10.0f), Color.White);
+            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3:f} | Points: {4:f}", ship.Position.X,
+                ship.Position.Y, ship.Position.Z, ship.Lives, points), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
 
             // TODO: remove test missile completely, probably test sprite in 0,0,0 too

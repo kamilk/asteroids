@@ -18,11 +18,11 @@ namespace Asteroids
             get { return model; }
             set { model = value; }
         }
-        private int _lives = 3;
+        private int lives = 3;
 
         public int Lives
         {
-            get { return _lives; }
+            get { return lives; }
         }
 
         Matrix[] transforms;
@@ -139,14 +139,9 @@ namespace Asteroids
             SpacecraftPosition += moveSpeed * rotatedVector;
         }
 
-        public bool Collide_DoesEnd()
+        internal void Collide()
         {
-            --_lives;
-
-            if (_lives <= 0)
-                return true;
-
-            return false;
+            --lives;
         }
     }
 }

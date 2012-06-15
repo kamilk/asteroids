@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Windows.Forms;
 
 namespace Asteroids
 {
@@ -79,11 +80,16 @@ namespace Asteroids
             basicEffect = new BasicEffect(device);
             coordCross = new CoordCross(device);
 
-            ship = new Spaceship(Content);
-            camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
-
             skyboxModel = Content.Load<Model>(ResourceNames.SkyboxModel);
             skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
+
+            StartNewGame();
+        }
+
+        private void StartNewGame()
+        {
+            ship = new Spaceship(Content);
+            camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
 
             int x, y, z, pos_x, pos_y, pos_z;
             Random random = new Random();
@@ -110,6 +116,8 @@ namespace Asteroids
 
             particleSystem = new ParticleSystem(spriteManager);
             jetParticleEffect = new JetParticleEffect(particleSystem, ship);
+
+            points = 0;
         }
 
         /// <summary>
@@ -130,7 +138,7 @@ namespace Asteroids
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Space))
+            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
             {
                 if (spaceDown == false)
                 {
@@ -191,9 +199,16 @@ namespace Asteroids
             if (collided_object_ship)
             {
                 if (!has_just_collided)
-
-                    if (ship.Collide_DoesEnd())
-                        Exit();     //TODO: some end game text, option to try again etc. (possibly)
+                    ship.Collide();
+                    if (ship.Lives <= 0)
+                        if (MessageBox.Show("Straciłeś wszystkie życia. Grać ponownie?", "Koniec gry", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            StartNewGame();
+                        }
+                        else
+                        {
+                            Exit();
+                        }
 
                 has_just_collided = true;
                 points -= 20;
@@ -323,7 +338,7 @@ namespace Asteroids
         bool checkExitKey(KeyboardState keyboardState, GamePadState gamePadState)
         {
             // Check to see whether ESC was pressed on the keyboard 
-            if (keyboardState.IsKeyDown(Keys.Escape))
+            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
             {
                 Exit();
                 return true;

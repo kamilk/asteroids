@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa mogąca pomieścić określoną liczbę sprite'ów i mogąca narysować je
+    /// "jednym rzutem". 
+    /// </summary>
     public class BatchOfSprites : IDisposable
     {
         public const int MaxSprites = 100;

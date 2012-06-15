@@ -10,6 +10,9 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa zawieraj¹ca metody pomocnicze, przydatne przy korzystaniu z XNA.
+    /// </summary>
     public static class XNAUtils
     {
         private static VertexDeclaration posColVertexDeclaration;

@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa pocisku, jaki może zostać wystrzelony przez gracza.
+    /// </summary>
     public class Missile : IModel, IJet
     {
         private const int lifeTimeInSeconds = 30;

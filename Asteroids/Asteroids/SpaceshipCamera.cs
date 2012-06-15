@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Kamera podążająca za statkiem kosmicznym.
+    /// </summary>
     class SpaceshipCamera : ICamera
     {
         Matrix viewMatrix;
@@ -79,15 +82,7 @@ namespace Asteroids
         {
             get { return viewMatrix; }
         }
-        public Vector3 Position
-        {
-            get { return cameraPosition; }
-            set
-            {
-                cameraPosition = value;
-                Update();
-            }
-        }
+
         public Vector3 TargetPosition
         {
             get

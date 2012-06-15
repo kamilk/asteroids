@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa rysująca strzałki układu współrzędnych.
+    /// </summary>
     class CoordCross
     {
         private VertexPositionColor[] vertices;

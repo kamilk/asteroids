@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa reprezentujaca sterowany przez gracza statek kosmiczny.
+    /// </summary>
     public class Spaceship : IJet
     {
         Model model;

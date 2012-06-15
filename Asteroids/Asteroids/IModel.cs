@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Interfejs trójwymiarowego obiektu.
+    /// </summary>
     public interface IModel : IPositionedObject
     {
         Model Model

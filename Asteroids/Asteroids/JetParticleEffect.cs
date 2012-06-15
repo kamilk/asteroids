@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Efekt cząsteczkowy silnika odrzutowego.
+    /// </summary>
     class JetParticleEffect : ParticleEffect
     {
         private double nextSpawnTime;

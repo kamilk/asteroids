@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Pojedynczy sprite/billboard.
+    /// </summary>
     public class Sprite : INotifyPropertyChanged
     {
         private ObservableVector3 _Position;

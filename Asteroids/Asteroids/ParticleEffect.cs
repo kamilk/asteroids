@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa bazowa dla efektów cząsteczkowych. Dziedzicząc po niej można stworzyć
+    /// różnie zachowujące się efekty cząsteczkowe.
+    /// </summary>
     abstract class ParticleEffect
     {
         HashSet<Particle> particles = new HashSet<Particle>();

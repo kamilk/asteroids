@@ -114,11 +114,10 @@
     <Compile Include="TextureAndMaskNames.cs" />
     <Compile Include="ResourceNames.cs" />
     <Compile Include="BatchOfSprites.cs" />
-    <Compile Include="MissileJetParticleEffect.cs" />
+    <Compile Include="JetParticleEffect.cs" />
     <Compile Include="ICamera.cs" />
     <Compile Include="CoordCross.cs" />
     <Compile Include="IModel.cs" />
-    <Compile Include="JetParticleEffect.cs" />
     <Compile Include="Missile.cs" />
     <Compile Include="ModelUtils.cs" />
     <Compile Include="ObservableVector3.cs" />
@@ -131,7 +130,6 @@
     <Compile Include="AutoResizableSpriteGroup.cs" />
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpaceshipCamera.cs" />
-    <Compile Include="Sphere.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteCornerVertex.cs" />
     <Compile Include="SpriteManager.cs" />

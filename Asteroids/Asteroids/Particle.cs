@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa reprezentująca cząstkę efektu cząsteczkowego.
+    /// </summary>
     public class Particle
     {
         public float Size

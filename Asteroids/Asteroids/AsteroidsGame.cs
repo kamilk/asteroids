@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 namespace Asteroids
 {
     /// <summary>
-    /// This is the main type for your game
+    /// Główna klasa gry
     /// </summary>
     public class AsteroidsGame : Microsoft.Xna.Framework.Game
     {

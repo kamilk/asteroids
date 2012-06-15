@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa mogąca pomieścić niemalże dowolną liczbę sprite'ów i wszystkie je narysować. 
+    /// Nie pozwala jednak zmienić tekstury w trakcie rysowania.
+    /// </summary>
     public class AutoResizableSpriteGroup : IDisposable
     {
         private GraphicsDevice device;

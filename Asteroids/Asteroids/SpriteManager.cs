@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa odpowiedzialna za przechowywanie i zarządzanie sprite'ami.
+    /// </summary>
     public class SpriteManager : IDisposable
     {
         private Dictionary<TextureAndMaskNames, AutoResizableSpriteGroup> spriteGroupsByTexture = new Dictionary<TextureAndMaskNames, AutoResizableSpriteGroup>();

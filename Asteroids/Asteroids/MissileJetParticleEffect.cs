@@ -42,25 +42,18 @@ namespace Asteroids
             if (!ShouldNewParticleSpawn(time))
                 return;
 
-            Matrix jetMatrix = missile.GetJetOrientationMatrix();
-            Vector3 position = Vector3.Transform(Vector3.Zero, jetMatrix);
-
             do
             {
                 nextSpawnTime += 1000.0f / particlesPerSecond;
 
-                Vector3 jetDirection = new Vector3(
-                    AsteroidsUtilities.Random(-0.1f, 0.1f), 
-                    AsteroidsUtilities.Random(-0.1f, 0.1f), 
-                    AsteroidsUtilities.Random(0.6f, 0.8f));
-                Vector3 velocity = Vector3.Transform(jetDirection, jetMatrix) - position;
+                Vector3 velocity = Vector3.Transform(new Vector3(1.0f, 0.0f, 0.0f), missile.Rotation);
                 velocity.Normalize();
                 velocity *= 0.5f;
 
                 var particle = CreateParticle(ResourceNames.ParticleTexture, ResourceNames.ParticleMask, time);
-                particle.Position.UnderlyingVector = position;
+                particle.Position.UnderlyingVector = missile.Position;
                 particle.Velocity = velocity;
-                particle.Size = 0.5f;
+                particle.Size = 0.4f;
             } while (ShouldNewParticleSpawn(time));
         }
 

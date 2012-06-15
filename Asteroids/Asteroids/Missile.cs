@@ -97,11 +97,5 @@ namespace Asteroids
         {
             ModelUtils.Draw(this, fpsCam);
         }
-
-        public Matrix GetJetOrientationMatrix()
-        {
-            var shift = new Vector3(0.0f, 0.0f, 0.5f);
-            return Matrix.CreateTranslation(shift) * WorldMatrix;
-        }
     }
 }

@@ -245,6 +245,23 @@ namespace Asteroids
                 }
             }
 
+            bool shouldEnd = true;
+
+            // Check if the game should end
+            for (int i = 0; i < NUM_ASTEROIDS; ++i)
+            {
+                if (asteroids[i] == null)
+                    continue;
+                else
+                {
+                    shouldEnd = false;
+                    break;
+                }
+            }
+
+            if (shouldEnd)
+                Exit(); 
+
             base.Update(gameTime);
         }
 

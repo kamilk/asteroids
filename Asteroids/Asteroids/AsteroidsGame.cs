@@ -38,8 +38,7 @@ namespace Asteroids
 
         const int NUM_ASTEROIDS = 20;
 
-        bool collided_object_ship = false;
-        bool has_just_collided = false;
+        bool asteroidCollidesWithShip = false;
         int points = 0;
 
         SpriteFont spFont;
@@ -138,6 +137,36 @@ namespace Asteroids
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState keyboardState = Keyboard.GetState();
 
+            FireMissileIfSpacePressed(keyboardState);
+
+            // Check to see if the user has exited
+            if (checkExitKey(keyboardState, gamePadState))
+            {
+                base.Update(gameTime);
+                return;
+            }
+
+            UpdateShip(gameTime, ref gamePadState, ref keyboardState);
+            UpdateCamera();
+            UpdateAsteroids(gameTime);
+            UpdateMissiles(gameTime);
+            UpdateMissileEffects(gameTime);
+
+            CollideAsteroidsWithShip();
+
+            if (checkGameOver())
+            {
+                base.Update(gameTime);
+                return;
+            }
+
+            CollideRocketsWithAsteroids();
+
+            base.Update(gameTime);
+        }
+
+        private void FireMissileIfSpacePressed(KeyboardState keyboardState)
+        {
             if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
             {
                 if (spaceDown == false)
@@ -150,25 +179,65 @@ namespace Asteroids
             {
                 spaceDown = false;
             }
+        }
 
-            // Check to see if the user has exited
-            if (checkExitKey(keyboardState, gamePadState))
+        bool checkExitKey(KeyboardState keyboardState, GamePadState gamePadState)
+        {
+            // Check to see whether ESC was pressed on the keyboard 
+            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
             {
-                base.Update(gameTime);
-                return;
+                Exit();
+                return true;
             }
 
-            ship.Update(Mouse.GetState(), keyboardState, gamePadState);
-            camera.Update();
+            return false;
+        }
 
+        private bool checkGameOver()
+        {
+            if (asteroidCollidesWithShip)
+            {
+                ship.Collide();
+                points -= 20;
+
+                if (ship.Lives <= 0)
+                {
+                    if (MessageBox.Show("Straciłeś wszystkie życia. Grać ponownie?", "Koniec gry", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        StartNewGame();
+                    }
+                    else
+                    {
+                        Exit();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void UpdateShip(GameTime gameTime, ref GamePadState gamePadState, ref KeyboardState keyboardState)
+        {
+            ship.Update(Mouse.GetState(), keyboardState, gamePadState);
+            jetParticleEffect.Update(gameTime);
+        }
+
+        private void UpdateCamera()
+        {
+            camera.Update();
+        }
+
+        private void UpdateAsteroids(GameTime gameTime)
+        {
             for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
-                if (asteroids[i] == null)
-                    continue;
-
-                asteroids[i].Update(gameTime, ship.SpacecraftPosition);
+                if (asteroids[i] != null)
+                    asteroids[i].Update(gameTime, ship.SpacecraftPosition);
             }
+        }
 
+        private void UpdateMissiles(GameTime gameTime)
+        {
             foreach (Missile missile in missiles)
             {
                 missile.Update(gameTime, ship.SpacecraftPosition);
@@ -177,12 +246,21 @@ namespace Asteroids
             {
                 DeleteMissile(missile);
             }
+        }
 
-            jetParticleEffect.Update(gameTime);
+        private void UpdateMissileEffects(GameTime gameTime)
+        {
+            var missileEffectsToRemove = new List<MissileJetParticleEffect>();
+            foreach (var effect in missileEffects)
+            {
+                effect.Update(gameTime);
+            }
+            missileEffects.RemoveWhere(m => m.IsDead);
+        }
 
-            UpdateMissileEffects(gameTime);
-
-            collided_object_ship = false;
+        private void CollideAsteroidsWithShip()
+        {
+            asteroidCollidesWithShip = false;
 
             for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
@@ -191,33 +269,14 @@ namespace Asteroids
 
                 if (XNAUtils.ModelsCollide(asteroids[i].Model, asteroids[i].WorldMatrix, ship.Model, ship.WorldMatrix))
                 {
-                    collided_object_ship = true;
+                    asteroidCollidesWithShip = true;
                     asteroids[i] = null;
                 }
             }
+        }
 
-            if (collided_object_ship)
-            {
-                if (!has_just_collided)
-                    ship.Collide();
-                    if (ship.Lives <= 0)
-                        if (MessageBox.Show("Straciłeś wszystkie życia. Grać ponownie?", "Koniec gry", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-                            StartNewGame();
-                        }
-                        else
-                        {
-                            Exit();
-                        }
-
-                has_just_collided = true;
-                points -= 20;
-            }
-            else
-            {
-                has_just_collided = false;
-            }
-
+        private void CollideRocketsWithAsteroids()
+        {
             // Check for collisions rocket - asteroid
             for (int i = 0; i < NUM_ASTEROIDS; ++i)
             {
@@ -246,18 +305,6 @@ namespace Asteroids
                     DeleteMissile(missileToRemove);
                 }
             }
-
-            base.Update(gameTime);
-        }
-
-        private void UpdateMissileEffects(GameTime gameTime)
-        {
-            var missileEffectsToRemove = new List<MissileJetParticleEffect>();
-            foreach (var effect in missileEffects)
-            {
-                effect.Update(gameTime);
-            }
-            missileEffects.RemoveWhere(m => m.IsDead);
         }
 
         private void FireNewMissile()
@@ -324,7 +371,7 @@ namespace Asteroids
             spriteManager.DrawAll(spriteDrawer, camera);
 
             spBatch.Begin();    //TODO: remove lives from text renderer and place 2d images representing lifes.
-            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3:f} | Points: {4:f}", ship.SpacecraftPosition.X,
+            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3} | Points: {4:f}", ship.SpacecraftPosition.X,
                 ship.SpacecraftPosition.Y, ship.SpacecraftPosition.Z, ship.Lives, points), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
 
@@ -335,16 +382,5 @@ namespace Asteroids
             base.Draw(gameTime);
         }
 
-        bool checkExitKey(KeyboardState keyboardState, GamePadState gamePadState)
-        {
-            // Check to see whether ESC was pressed on the keyboard 
-            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
-            {
-                Exit();
-                return true;
-            }
-
-            return false;
-        }
     }
 }

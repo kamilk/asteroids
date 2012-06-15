@@ -165,7 +165,7 @@ namespace Asteroids
             {
                 missile.Update(gameTime, ship.SpacecraftPosition);
             }
-            foreach (Missile missile in missiles.Where(m => m.TimeToLive < 0).ToArray())
+            foreach (Missile missile in missiles.Where(m => m.HasDied).ToArray())
             {
                 DeleteMissile(missile);
             }

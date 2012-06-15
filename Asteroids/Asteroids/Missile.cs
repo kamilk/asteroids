@@ -10,6 +10,8 @@ namespace Asteroids
 {
     public class Missile : IModel
     {
+        private const int lifeTimeInSeconds = 30;
+
         private Model model;
         private Matrix[] transforms;
         private Quaternion rotation;
@@ -17,6 +19,7 @@ namespace Asteroids
         private Vector3 position;
         private float scale;
         private Vector3 moveVector;
+        private TimeSpan? creationTime;
 
         public Model Model
         {
@@ -48,6 +51,11 @@ namespace Asteroids
             get { return position; }
             set { position = value; }
         }
+        public bool HasDied
+        {
+            get;
+            private set;
+        }
 
         public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position)
         {
@@ -70,9 +78,7 @@ namespace Asteroids
 
         public Missile(ContentManager content, Spaceship ship)
             : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
-        {
-            this.TimeToLive = 300;
-        }
+        { }
 
         public void Update(GameTime time, Vector3 centerOfUniverse)
         {
@@ -81,7 +87,11 @@ namespace Asteroids
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this, centerOfUniverse);
-            TimeToLive -= 1;
+
+            if (creationTime == null)
+                creationTime = time.TotalGameTime;
+            else
+                HasDied = creationTime + new TimeSpan(0, 0, lifeTimeInSeconds) < time.TotalGameTime;
         }
 
         public void Draw(ICamera fpsCam)
@@ -94,7 +104,5 @@ namespace Asteroids
             var shift = new Vector3(0.0f, 0.0f, 0.5f);
             return Matrix.Multiply(WorldMatrix, Matrix.CreateTranslation(shift));
         }
-
-        public int TimeToLive { get; set; }
     }
 }

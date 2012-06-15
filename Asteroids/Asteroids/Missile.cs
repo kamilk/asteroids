@@ -83,7 +83,6 @@ namespace Asteroids
         public void Update(GameTime time, Vector3 centerOfUniverse)
         {
             float moveSpeed = 0.3f;
-            rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.01f);
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this, centerOfUniverse);
@@ -102,7 +101,7 @@ namespace Asteroids
         public Matrix GetJetOrientationMatrix()
         {
             var shift = new Vector3(0.0f, 0.0f, 0.5f);
-            return Matrix.Multiply(WorldMatrix, Matrix.CreateTranslation(shift));
+            return Matrix.CreateTranslation(shift) * WorldMatrix;
         }
     }
 }

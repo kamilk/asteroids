@@ -6,7 +6,7 @@ namespace Asteroids
     class JetParticleEffect : ParticleEffect
     {
         private const double particlesPerSecond = 50.0;
-        private const double particleLifetime = 2000.0;
+        private const double particleLifetime = 400.0;
 
         private Random random = new Random();
         private double nextSpawnTime;
@@ -56,6 +56,12 @@ namespace Asteroids
                 return false;
 
             particle.Position.UnderlyingVector += particle.Velocity * (float)time.ElapsedGameTime.TotalSeconds;
+
+            double fractionOfLifeLived = (double)(time.TotalGameTime - particle.SpawnTime).TotalMilliseconds / (double)particleLifetime;
+            Color color = new Color();
+            color.G = color.B = (byte)(255.0 - fractionOfLifeLived * 255.0);
+            color.R = 255;
+            particle.Color = color;
 
             return true;
         }

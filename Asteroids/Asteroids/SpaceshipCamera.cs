@@ -48,7 +48,7 @@ namespace Asteroids
 
         public void Update()
         {
-            Vector3 cameraOriginalPosition = new Vector3(0.0f, 0.2f, 1.0f);
+            Vector3 cameraOriginalPosition = new Vector3(0.0f, 0.3f, 1.0f);
             Vector3 cameraRotatedPosition = Vector3.Transform(cameraOriginalPosition, ship.SpacecraftRotation);
             Vector3 cameraFinalPosition = ship.SpacecraftPosition + cameraRotatedPosition;
 

@@ -57,7 +57,7 @@ namespace Asteroids
             private set;
         }
 
-        public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position)
+        public Missile(ContentManager content, Vector3 moveVector, Vector3 position)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, ResourceNames.Missile, content);
 
@@ -77,7 +77,7 @@ namespace Asteroids
         }
 
         public Missile(ContentManager content, Spaceship ship)
-            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
+            : this(content, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
         { }
 
         public void Update(GameTime time, Vector3 centerOfUniverse)

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
-    public class SpriteManager
+    public class SpriteManager : IDisposable
     {
         private Dictionary<TextureAndMaskNames, AutoResizableSpriteGroup> spriteGroupsByTexture = new Dictionary<TextureAndMaskNames, AutoResizableSpriteGroup>();
         private Dictionary<Sprite, AutoResizableSpriteGroup> spriteGroupsBySprite = new Dictionary<Sprite, AutoResizableSpriteGroup>();
@@ -59,6 +60,12 @@ namespace Asteroids
                 spriteDrawer.DrawBatchOfSprites(spriteGroup);
             }
             spriteDrawer.End();
+        }
+
+        public void Dispose()
+        {
+            foreach (var group in spriteGroupsByTexture.Values)
+                group.Dispose();
         }
     }
 }

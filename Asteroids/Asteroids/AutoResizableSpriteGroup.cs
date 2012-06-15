@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
-    public class AutoResizableSpriteGroup
+    public class AutoResizableSpriteGroup : IDisposable
     {
         private GraphicsDevice device;
         private HashSet<BatchOfSprites> batches = new HashSet<BatchOfSprites>();
@@ -48,6 +48,12 @@ namespace Asteroids
                 device.SetVertexBuffer(batch.GetVertexBuffer());
                 batch.DrawAll();
             }
+        }
+
+        public void Dispose()
+        {
+            foreach (var batch in batches)
+                batch.Dispose();
         }
     }
 }

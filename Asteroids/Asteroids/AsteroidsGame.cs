@@ -121,6 +121,8 @@ namespace Asteroids
             // TODO: Unload any non ContentManager content here
             spriteDrawer.Dispose();
             spriteDrawer = null;
+            spriteManager.Dispose();
+            spriteManager = null;
         }
 
         private bool spaceDown = false;

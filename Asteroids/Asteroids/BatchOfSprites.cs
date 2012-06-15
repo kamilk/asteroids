@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
-    public class BatchOfSprites
+    public class BatchOfSprites : IDisposable
     {
         public const int MaxSprites = 100;
 
@@ -113,6 +113,11 @@ namespace Asteroids
         public void DrawAll()
         {
             device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, GetVertexCount(), 0, GetTriangleCount());
+        }
+
+        public void Dispose()
+        {
+            vertexBuffer.Dispose();
         }
 
         private void AddSpriteAtIndex(int idx, Sprite sprite)

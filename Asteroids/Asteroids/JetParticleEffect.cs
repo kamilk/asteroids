@@ -87,7 +87,7 @@ namespace Asteroids
             nextSpawnTime = time.TotalGameTime.TotalMilliseconds + 1000.0f / ParticlesPerSecond;
         }
 
-        protected override void UpdateSystem(GameTime time)
+        protected override void UpdateEffect(GameTime time)
         {
             if (!active)
                 return;

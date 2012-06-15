@@ -36,7 +36,7 @@ namespace Asteroids
                 initialized = true;
             }
 
-            UpdateSystem(time);
+            UpdateEffect(time);
 
             List<Particle> particlesToDelete = new List<Particle>();
             foreach (Particle particle in particles)
@@ -56,7 +56,7 @@ namespace Asteroids
 
         protected abstract bool UpdateParticle(Particle particle, GameTime time);
 
-        protected abstract void UpdateSystem(GameTime time);
+        protected abstract void UpdateEffect(GameTime time);
 
         protected Particle CreateParticle(string textureName, string maskName, GameTime time)
         {

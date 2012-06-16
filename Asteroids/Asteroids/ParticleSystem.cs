@@ -2,6 +2,9 @@
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa zarządzająca wszystkimi efektami cząsteczkowymi.
+    /// </summary>
     public class ParticleSystem
     {
         private SpriteManager spriteManager;

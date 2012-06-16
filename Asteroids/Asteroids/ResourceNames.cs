@@ -1,5 +1,8 @@
 ﻿namespace Asteroids
 {
+    /// <summary>
+    /// Klasa ze stałymi, będącymi nazwami zasobów (assets) zawartości (content) XNA.
+    /// </summary>
     static class ResourceNames
     {
         public const string ParticleTexture = "particle";

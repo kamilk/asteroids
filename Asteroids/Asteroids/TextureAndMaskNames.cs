@@ -1,5 +1,8 @@
 ﻿namespace Asteroids
 {
+    /// <summary>
+    /// Klasa opakowująca nazwy dwóch tekstur: tekstury głównej i tekstury maski.
+    /// </summary>
     class TextureAndMaskNames
     {
         public string TextureName

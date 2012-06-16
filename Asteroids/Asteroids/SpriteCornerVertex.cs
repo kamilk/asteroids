@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Struktura wierzchołka Sprite'a.
+    /// </summary>
     struct SpriteCornerVertex
     {
         public Vector2 Corner;

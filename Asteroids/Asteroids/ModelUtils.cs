@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa zawierająca metody pomocnicze do rysowania modelu.
+    /// </summary>
     public static class ModelUtils
     {
         public static void Draw(IModel model, ICamera fpsCam)

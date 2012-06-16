@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa zawierająca statyczne metody, jakie mogą się przydać 
+    /// gdziekolwiek w naszym programie.
+    /// </summary>
     static class AsteroidsUtilities
     {
         private static Random random = new Random();

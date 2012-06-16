@@ -6,7 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Asteroids
 {
-    public class AutoResizableSpriteGroup
+    /// <summary>
+    /// Klasa mogąca pomieścić niemalże dowolną liczbę sprite'ów i wszystkie je narysować. 
+    /// Nie pozwala jednak zmienić tekstury w trakcie rysowania.
+    /// </summary>
+    public class AutoResizableSpriteGroup : IDisposable
     {
         private GraphicsDevice device;
         private HashSet<BatchOfSprites> batches = new HashSet<BatchOfSprites>();
@@ -48,6 +52,12 @@ namespace Asteroids
                 device.SetVertexBuffer(batch.GetVertexBuffer());
                 batch.DrawAll();
             }
+        }
+
+        public void Dispose()
+        {
+            foreach (var batch in batches)
+                batch.Dispose();
         }
     }
 }

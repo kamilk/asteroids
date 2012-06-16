@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa opakowująca Vector3, która może powiadamiać o zmianie wartości wektora.
+    /// </summary>
     public class ObservableVector3
     {
         private Vector3 vector;

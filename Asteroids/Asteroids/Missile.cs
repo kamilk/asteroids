@@ -8,8 +8,13 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
-    public class Missile : IModel
+    /// <summary>
+    /// Klasa pocisku, jaki może zostać wystrzelony przez gracza.
+    /// </summary>
+    public class Missile : IModel, IJet
     {
+        private const int lifeTimeInSeconds = 30;
+
         private Model model;
         private Matrix[] transforms;
         private Quaternion rotation;
@@ -17,6 +22,7 @@ namespace Asteroids
         private Vector3 position;
         private float scale;
         private Vector3 moveVector;
+        private TimeSpan? creationTime;
 
         public Model Model
         {
@@ -48,8 +54,17 @@ namespace Asteroids
             get { return position; }
             set { position = value; }
         }
+        public bool HasDied
+        {
+            get;
+            private set;
+        }
+        public Vector3 JetPosition
+        {
+            get { return Vector3.Transform(Vector3.Zero, WorldMatrix); }
+        }
 
-        public Missile(ContentManager content, Spaceship ship, Vector3 moveVector, Vector3 position)
+        public Missile(ContentManager content, Vector3 moveVector, Vector3 position)
         {
             model = XNAUtils.LoadModelWithBoundingSphere(ref transforms, ResourceNames.Missile, content);
 
@@ -69,32 +84,25 @@ namespace Asteroids
         }
 
         public Missile(ContentManager content, Spaceship ship)
-            : this(content, ship, Vector3.Transform(Vector3.Forward, ship.SpacecraftRotation), ship.SpacecraftPosition)
-        {
-            this.TimeToLive = 300;
-        }
+            : this(content, Vector3.Transform(Vector3.Forward, ship.Rotation), ship.Position)
+        { }
 
         public void Update(GameTime time, Vector3 centerOfUniverse)
         {
             float moveSpeed = 0.3f;
-            rotation *= Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), 0.01f);
 
             position += moveSpeed * moveVector;
             position = ModelUtils.BendSpace(this, centerOfUniverse);
-            TimeToLive -= 1;
+
+            if (creationTime == null)
+                creationTime = time.TotalGameTime;
+            else
+                HasDied = creationTime + new TimeSpan(0, 0, lifeTimeInSeconds) < time.TotalGameTime;
         }
 
         public void Draw(ICamera fpsCam)
         {
             ModelUtils.Draw(this, fpsCam);
         }
-
-        public Matrix GetJetOrientationMatrix()
-        {
-            var shift = new Vector3(0.0f, 0.0f, 0.5f);
-            return Matrix.Multiply(WorldMatrix, Matrix.CreateTranslation(shift));
-        }
-
-        public int TimeToLive { get; set; }
     }
 }

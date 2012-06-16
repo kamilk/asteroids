@@ -3,6 +3,10 @@ using System;
 namespace Asteroids
 {
 #if WINDOWS || XBOX
+
+    /// <summary>
+    /// G³ówna klasa programu.
+    /// </summary>
     static class Program
     {
         /// <summary>

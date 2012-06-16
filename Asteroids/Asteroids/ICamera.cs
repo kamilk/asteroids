@@ -2,6 +2,9 @@
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Interfejs kamery.
+    /// </summary>
     public interface ICamera
     {
         Matrix ProjectionMatrix
@@ -12,11 +15,7 @@ namespace Asteroids
         {
             get;
         }
-        Vector3 Position
-        {
-            get;
-            set;
-        }
+
         void Update();
     }
 }

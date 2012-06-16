@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa reprezentująca asteroidę.
+    /// </summary>
     class Asteroid : IModel
     {
         private Model model;

@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Asteroids
 {
+    /// <summary>
+    /// Klasa odpowiedzialna za rysowanie sprite'ów.
+    /// </summary>
     public class SpriteDrawer : IDisposable
     {
         private GraphicsDevice device;

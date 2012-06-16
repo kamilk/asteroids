@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Windows.Forms;
 
 namespace Asteroids
 {
@@ -79,11 +80,16 @@ namespace Asteroids
             basicEffect = new BasicEffect(device);
             coordCross = new CoordCross(device);
 
-            ship = new Spaceship(Content);
-            camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
-
             skyboxModel = Content.Load<Model>(ResourceNames.SkyboxModel);
             skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
+
+            StartNewGame();
+        }
+
+        private void StartNewGame()
+        {
+            ship = new Spaceship(Content);
+            camera = new SpaceshipCamera(graphics.GraphicsDevice.Viewport, ship);
 
             int x, y, z, pos_x, pos_y, pos_z;
             Random random = new Random();
@@ -109,7 +115,9 @@ namespace Asteroids
             spBatch = new SpriteBatch(graphics.GraphicsDevice);
 
             particleSystem = new ParticleSystem(spriteManager);
-            jetParticleEffect = new JetParticleEffect(particleSystem, ship);
+            jetParticleEffect = new JetParticleEffect(particleSystem, ship);          
+
+            points = 0;
             jetParticleEffect.MinXDirection = -0.3f;
             jetParticleEffect.MaxXDirection = 0.3f;
             jetParticleEffect.MinZDirection = 0.6f;
@@ -143,7 +151,7 @@ namespace Asteroids
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Space))
+            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
             {
                 if (spaceDown == false)
                 {
@@ -204,9 +212,17 @@ namespace Asteroids
             if (collided_object_ship)
             {
                 if (!has_just_collided)
-
-                    if (ship.Collide_DoesEnd())
-                        Exit();     //TODO: some end game text, option to try again etc. (possibly)
+                    ship.Collide();
+                    if (ship.Lives <= 0)
+                        if (MessageBox.Show("Straciłeś wszystkie życia. Grać ponownie?", "Koniec gry", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            StartNewGame();
+                            return;
+                        }
+                        else
+                        {
+                            Exit();
+                        }
 
                 has_just_collided = true;
                 points -= 20;
@@ -351,7 +367,7 @@ namespace Asteroids
             spriteManager.DrawAll(spriteDrawer, camera);
 
             spBatch.Begin();    //TODO: remove lives from text renderer and place 2d images representing lifes.
-            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3:f} | Points: {4:f}", ship.Position.X,
+            spBatch.DrawString(spFont, String.Format("Ship: {0:f} {1:f} {2:f} | Lives: {3} | Points: {4:f}", ship.Position.X,
                 ship.Position.Y, ship.Position.Z, ship.Lives, points), new Vector2(10.0f, 10.0f), Color.White);
             spBatch.End();
 
@@ -365,7 +381,7 @@ namespace Asteroids
         bool checkExitKey(KeyboardState keyboardState, GamePadState gamePadState)
         {
             // Check to see whether ESC was pressed on the keyboard 
-            if (keyboardState.IsKeyDown(Keys.Escape))
+            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
             {
                 Exit();
                 return true;

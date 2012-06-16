@@ -151,14 +151,9 @@ namespace Asteroids
             Position += moveSpeed * rotatedVector;
         }
 
-        public bool Collide_DoesEnd()
+        internal void Collide()
         {
             --lives;
-
-            if (lives <= 0)
-                return true;
-
-            return false;
         }
     }
 }
